@@ -1,0 +1,26 @@
+{
+  "navigation": {
+    "home": "Home",
+    "chat": "Chat",
+    "night-mode": "Night mode",
+    "app": "Social Media App",
+    "logout": "Logout"
+  },
+  "login": {
+    "title": "Please login",
+    "name": "Name",
+    "set-name": "Login",
+    "error-name-min-length": "Name must be at least 4 characters long",
+    "error-name-required": "Name is required"
+  },
+  "chat": {
+    "chat": {
+      "say-hello": "Say hello to",
+      "back": "Go to chat list",
+      "send": "Send message",
+      "new-message": "Type in your message here...",
+      "new-message-hint": "Press Enter to send",
+      "error-message-required": "Message cannot be blank"
+    }
+  }
+}
