@@ -1,3 +1,15 @@
+Team members:
+
+[Jakub Cywiński](https://github.com/xjakubcywinski)
+
+[Dorota Nowakowska](https://github.com/doritos12)
+
+[Patryk Kaca](https://github.com/Patrykaca)
+
+[Jakub Podwysocki](https://github.com/Topeeerz)
+
+[Bartosz Kępka](https://github.com/bartosz-kepka)
+
 # social-media-app
 
 # IMPORTANT: To test on other devices (e.g. smartphone): 
