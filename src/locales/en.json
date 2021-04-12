@@ -1,26 +1,46 @@
 {
+  "general": {
+    "cancel": "Cancel",
+    "create": "Create",
+    "close": "Close"
+  },
   "navigation": {
     "home": "Home",
     "chat": "Chat",
     "night-mode": "Night mode",
     "app": "Social Media App",
-    "logout": "Logout"
+    "language": "Language",
+    "log-out": "Log out"
+  },
+  "notifications": {
+    "new-private-message": "New private message from {sender}",
+    "new-group-message": "New message in group chat with {members}"
   },
   "login": {
-    "title": "Please login",
+    "title": "Please log in",
     "name": "Name",
-    "set-name": "Login",
+    "log-in": "Log in",
     "error-name-min-length": "Name must be at least 4 characters long",
     "error-name-required": "Name is required"
   },
   "chat": {
-    "chat": {
-      "say-hello": "Say hello to",
-      "back": "Go to chat list",
-      "send": "Send message",
+    "list": {
+      "no-chats": "You have no chats",
+      "your-chats": "You have {count} chats:"
+    },
+    "conversation": {
+      "no-messages": "This chat has no messages yet",
       "new-message": "Type in your message here...",
-      "new-message-hint": "Press Enter to send",
       "error-message-required": "Message cannot be blank"
+    },
+    "create": {
+      "title": "Create new chat",
+      "subtitle": "Add members",
+      "member-name": "Member name",
+      "error-message-required": "You must provide member name",
+      "error-message-not-current-user": "You don't have to add yourself",
+      "error-message-not-already-added": "This user is already added",
+      "error-message-chat-exists": "Chat with these members already exists"
     }
   }
 }

@@ -1,15 +1,16 @@
-import $axios from '@/axios';
+import ChatService from '@/services/http/chat.service';
+import i18n from '@/locales/i18n';
 
 export default {
   namespaced: true,
   state: {
+    loading: false,
     chats: [],
-    chatsLoading: false,
     chat: undefined,
   },
   mutations: {
-    setChatsLoading(state, loading) {
-      state.chatsLoading = loading;
+    setLoading(state, loading) {
+      state.loading = loading;
     },
     setChats(state, chats) {
       state.chats = chats;
@@ -17,41 +18,97 @@ export default {
     setChat(state, chat) {
       state.chat = chat;
     },
+    clearChat(state) {
+      state.chat = undefined;
+    },
+    clearChats(state) {
+      state.chats = [];
+    },
+    addChat(state, newChat) {
+      state.chats.push(newChat);
+    },
     addMessage(state, newMessage) {
       state.chat.messages.push(newMessage);
     },
   },
   actions: {
     fetchChats({ commit }) {
-      commit('setChatsLoading', true);
-      $axios.get('/chats').then(response => {
+      commit('setLoading', true);
+      ChatService.fetchChats().then(response => {
         commit('setChats', response.data);
-        commit('setChatsLoading', false);
+        commit('setLoading', false);
       });
     },
     fetchChat({ commit }, chatId) {
-      commit('setChatsLoading', true);
-      $axios.get(`/chats/${chatId}`).then(response => {
+      commit('setLoading', true);
+      ChatService.fetchChat(chatId).then(response => {
         commit('setChat', response.data);
-        commit('setChatsLoading', false);
+        commit('setLoading', false);
       });
     },
-    sendMessage({ commit, rootState, state }, newMessageContent) {
+    clearChat({ commit }) {
+      commit('clearChat');
+    },
+    clearChats({ commit }) {
+      commit('clearChats');
+    },
+    createChat({ commit }, membersIds) {
+      const newChat = { membersIds };
+
+      commit('setLoading', true);
+      return ChatService.createChat(newChat).then(
+        response => {
+          commit('setChat', response.data);
+          commit('setLoading', false);
+          return response.data.id;
+        },
+        () => {
+          commit('setLoading', false);
+          return undefined;
+        },
+      );
+    },
+    sendMessage({ rootState, state }, newMessageContent) {
       const newMessage = {
         senderId: rootState.user.user.name,
         content: newMessageContent,
       };
 
-      const url = `/chats/${state.chat.id}/messages`;
-
-      $axios.post(url, newMessage).then(response => {
-        commit('addMessage', response.data);
-      });
+      return ChatService.sendMessage(state.chat.id, newMessage).then();
+    },
+    // socket.io usage: https://www.npmjs.com/package/vue-socket.io-extended
+    socket_newChat({ commit, rootState }, newChat) {
+      if (newChat.membersIds.includes(rootState.user.user.name)) {
+        commit('addChat', newChat);
+      }
+    },
+    socket_newMessage({ commit, state, rootState }, newMessageDTO) {
+      const { chatId, ...newMessage } = newMessageDTO;
+      if (state.chat && state.chat.id === chatId) {
+        commit('addMessage', newMessage);
+        return;
+      }
+      const chat = state.chats.find(chat => chat.id === chatId);
+      if (chat && chat.membersIds.includes(rootState.user.user.name)) {
+        let notification;
+        if (chat.membersIds.length === 2) {
+          notification = i18n.t(
+            'notifications.new-private-message',
+            { sender: newMessage.senderId },
+          );
+        } else {
+          notification = i18n.t(
+            'notifications.new-group-message',
+            { members: chat.membersIds.join(', ') },
+          );
+        }
+        this.dispatch('notification/showNotification', notification);
+      }
     },
   },
   getters: {
-    chats: state => state.chats || [],
-    chatsLoading: state => state.chatsLoading,
+    loading: state => state.loading,
+    chats: state => state.chats,
     chat: state => state.chat,
     chatMessages: state => state.chat?.messages || [],
   },

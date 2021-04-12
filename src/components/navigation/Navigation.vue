@@ -7,7 +7,7 @@
       fixed
     >
       <v-app-bar-nav-icon
-        v-if="$vuetify.breakpoint.mdAndDown"
+        v-if="$vuetify.breakpoint.mdAndDown && isAuthenticated"
         @click="drawer = true"
       />
       <v-toolbar-title>{{ $t('navigation.app') }}</v-toolbar-title>
@@ -17,7 +17,6 @@
         :hide-details="true"
         :label="$t('navigation.night-mode')"
         class="night-mode-switch"
-        @change="changeColorMode"
       />
     </v-app-bar>
     <v-navigation-drawer
@@ -32,17 +31,9 @@
           link
           to="/profile"
         >
-          <v-avatar
-            class="avatar mr-2"
-            size="52"
-          >
-            <img
-              alt="Your avatar"
-              src="../assets/logo.png"
-            >
-          </v-avatar>
+          <Avatar :alt="`${user.name}'s avatar`" />
           <v-list-item-content>
-            <v-list-item-title>{{ fullName }}</v-list-item-title>
+            <v-list-item-title>{{ user.name }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -66,12 +57,22 @@
       </v-list>
       <template v-slot:append>
         <div class="pa-3">
+          <v-select
+            v-model="language"
+            :items="languages"
+            :label="$t('navigation.language')"
+            append-icon="mdi-translate"
+            class="mb-3"
+            dense
+            hide-details
+            outlined
+          />
           <v-btn
             block
             color="error"
-            @click="logout"
+            @click="logOut"
           >
-            {{ $t('navigation.logout') }}
+            {{ $t('navigation.log-out') }}
           </v-btn>
         </div>
       </template>
@@ -80,42 +81,65 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import Avatar from '@/components/shared/Avatar';
+
 export default {
   name: 'Navigation',
+  components: { Avatar },
   data() {
     return {
-      drawer: null,
-      nightMode: true,
+      drawer: undefined,
+      languages: [
+        {
+          text: 'English',
+          value: 'en',
+        },
+        {
+          text: 'Polski',
+          value: 'pl',
+        },
+      ],
       links: [
         ['mdi-home', 'navigation.home', '/home'],
         ['mdi-forum', 'navigation.chat', '/chat'],
       ],
-      state: {
-        user: {
-          firstName: 'John',
-          lastName: 'Thiccccccccc',
-        },
-      },
     };
   },
   computed: {
-    isAuthenticated() {
-      return this.$store.getters['user/isAuthenticated'];
+    ...mapGetters({
+      isAuthenticated: 'user/isAuthenticated',
+      user: 'user/user',
+    }),
+    language: {
+      get() {
+        return this.$i18n.locale;
+      },
+      set(val) {
+        if (this.isAuthenticated) {
+          this.$store.dispatch('user/setLanguage', val);
+          return;
+        }
+        this.$i18n.locale = val;
+      },
     },
-    fullName() {
-      return `${this.state.user.firstName} ${this.state.user.lastName}`;
+    nightMode: {
+      get() {
+        return this.$vuetify.theme.dark;
+      },
+      set(val) {
+        if (this.isAuthenticated) {
+          this.$store.dispatch('user/setNightMode', val);
+          return;
+        }
+        this.$vuetify.theme.dark = val;
+      },
     },
-  },
-  beforeMount() {
-    this.changeColorMode();
   },
   methods: {
-    changeColorMode() {
-      this.$vuetify.theme.dark = this.nightMode;
-    },
-    logout() {
-      this.$store.dispatch('user/clearUser');
+    logOut() {
       this.drawer = false;
+      this.$store.dispatch('user/clearUser');
       this.$router.push({ name: 'Login' });
     },
   },
@@ -123,7 +147,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.avatar {
-  border: 2px solid white;
-}
 </style>

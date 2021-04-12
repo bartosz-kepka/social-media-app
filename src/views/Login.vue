@@ -33,7 +33,7 @@
           color="primary"
           type="submit"
         >
-          {{ $t('login.set-name') }}
+          {{ $t('login.log-in') }}
         </v-btn>
       </v-col>
     </v-row>
@@ -47,7 +47,7 @@ export default {
   name: 'Login',
   data() {
     return {
-      name: 'Bartek',
+      name: '',
     };
   },
   computed: {
@@ -75,7 +75,7 @@ export default {
         name: this.name,
       };
       this.$store.dispatch('user/setUser', user);
-      this.$router.push({ name: 'ChatList' });
+      this.$router.push({ name: 'Home' });
     },
   },
   validations: {

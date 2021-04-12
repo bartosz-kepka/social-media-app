@@ -1,0 +1,46 @@
+{
+  "general": {
+    "cancel": "Anuluj",
+    "create": "Utwórz",
+    "close": "Zamknij"
+  },
+  "navigation": {
+    "home": "Strona główna",
+    "chat": "Czat",
+    "night-mode": "Tryb nocny",
+    "app": "Social Media App",
+    "language": "Język",
+    "log-out": "Wyloguj"
+  },
+  "notifications": {
+    "new-private-message": "Nowa prywatna wiadomość od {sender}",
+    "new-group-message": "Nowa wiadomość w czacie z {members}"
+  },
+  "login": {
+    "title": "Zaloguj się",
+    "name": "Imię",
+    "log-in": "Zaloguj",
+    "error-name-min-length": "Imię musi zawierać conajmniej 4 znaki",
+    "error-name-required": "Imię jest wymagane"
+  },
+  "chat": {
+    "list": {
+      "no-chats": "Nie masz żadnych czatów",
+      "your-chats": "Masz {count} czat(ów):"
+    },
+    "conversation": {
+      "no-messages": "Ten czat nie ma jeszcze żadnej wiadomości",
+      "new-message": "Wpisz swoją wiadomość tutaj...",
+      "error-message-required": "Wiadomość nie może być pusta"
+    },
+    "create": {
+      "title": "Utwórz nowy czat",
+      "subtitle": "Dodaj członków",
+      "member-name": "Imię członka",
+      "error-message-required": "Musisz podać imię członka",
+      "error-message-not-current-user": "Nie musisz dodawać siebie",
+      "error-message-not-already-added": "Ten członek jest już dodany",
+      "error-message-chat-exists": "Czar z tymi użytkownikami już istnieje"
+    }
+  }
+}
