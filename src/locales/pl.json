@@ -14,7 +14,9 @@
   },
   "notifications": {
     "new-private-message": "Nowa prywatna wiadomość od {sender}",
-    "new-group-message": "Nowa wiadomość w czacie z {members}"
+    "new-group-message": "Nowa wiadomość od {sender} w czacie z {members}",
+    "new-private-chat": "{creator} utworzył z Tobą prywatny czat",
+    "new-group-chat": "{creator} utworzył nowy grupowy chat z {otherMembers} oraz Tobą"
   },
   "login": {
     "title": "Zaloguj się",
@@ -40,7 +42,7 @@
       "error-message-required": "Musisz podać imię członka",
       "error-message-not-current-user": "Nie musisz dodawać siebie",
       "error-message-not-already-added": "Ten członek jest już dodany",
-      "error-message-chat-exists": "Czar z tymi użytkownikami już istnieje"
+      "error-message-chat-exists": "Czat z tymi użytkownikami już istnieje"
     }
   }
 }

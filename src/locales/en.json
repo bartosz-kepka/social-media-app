@@ -14,7 +14,9 @@
   },
   "notifications": {
     "new-private-message": "New private message from {sender}",
-    "new-group-message": "New message in group chat with {members}"
+    "new-group-message": "New message from {sender} in group chat with {members}",
+    "new-private-chat": "{creator} created a private chat with you",
+    "new-group-chat": "{creator} created a group chat with {otherMembers} and you"
   },
   "login": {
     "title": "Please log in",
@@ -25,7 +27,7 @@
   },
   "chat": {
     "list": {
-      "no-chats": "You have no chats",
+      "no-chats": "You have no chat(s)",
       "your-chats": "You have {count} chats:"
     },
     "conversation": {

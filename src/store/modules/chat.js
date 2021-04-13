@@ -1,6 +1,50 @@
 import ChatService from '@/services/http/chat.service';
 import i18n from '@/locales/i18n';
 
+function createNewChatNotification(newChat, currentUserId) {
+  let notification;
+  const otherMembers = newChat.membersIds.filter(
+    memberId => memberId !== currentUserId && memberId !== newChat.creatorId,
+  );
+  if (otherMembers.length === 0) {
+    notification = i18n.t(
+      'notifications.new-private-chat',
+      { creator: newChat.creatorId },
+    );
+  } else {
+    notification = i18n.t(
+      'notifications.new-group-chat',
+      {
+        creator: newChat.creatorId,
+        otherMembers: otherMembers.join(', '),
+      },
+    );
+  }
+  return notification;
+}
+
+function createNewMessageNotification(chat, newMessage, currentUserId) {
+  let notification;
+  if (chat.membersIds.length === 2) {
+    notification = i18n.t(
+      'notifications.new-private-message',
+      { sender: newMessage.senderId },
+    );
+  } else {
+    const otherMembers = chat.membersIds.filter(
+      memberId => memberId !== currentUserId && memberId !== newMessage.senderId,
+    );
+    notification = i18n.t(
+      'notifications.new-group-message',
+      {
+        sender: newMessage.senderId,
+        members: otherMembers.join(', '),
+      },
+    );
+  }
+  return notification;
+}
+
 export default {
   namespaced: true,
   state: {
@@ -52,9 +96,11 @@ export default {
     clearChats({ commit }) {
       commit('clearChats');
     },
-    createChat({ commit }, membersIds) {
-      const newChat = { membersIds };
-
+    createChat({ commit, rootState }, membersIds) {
+      const newChat = {
+        creatorId: rootState.user.user.name,
+        membersIds,
+      };
       commit('setLoading', true);
       return ChatService.createChat(newChat).then(
         response => {
@@ -73,35 +119,29 @@ export default {
         senderId: rootState.user.user.name,
         content: newMessageContent,
       };
-
       return ChatService.sendMessage(state.chat.id, newMessage).then();
     },
     // socket.io usage: https://www.npmjs.com/package/vue-socket.io-extended
     socket_newChat({ commit, rootState }, newChat) {
-      if (newChat.membersIds.includes(rootState.user.user.name)) {
+      const currentUserId = rootState.user.user.name;
+      if (newChat.membersIds.includes(currentUserId)) {
         commit('addChat', newChat);
+        if (newChat.creatorId !== currentUserId) {
+          const notification = createNewChatNotification(newChat, currentUserId);
+          this.dispatch('notification/showNotification', notification);
+        }
       }
     },
     socket_newMessage({ commit, state, rootState }, newMessageDTO) {
+      const currentUserId = rootState.user.user.name;
       const { chatId, ...newMessage } = newMessageDTO;
       if (state.chat && state.chat.id === chatId) {
         commit('addMessage', newMessage);
         return;
       }
       const chat = state.chats.find(chat => chat.id === chatId);
-      if (chat && chat.membersIds.includes(rootState.user.user.name)) {
-        let notification;
-        if (chat.membersIds.length === 2) {
-          notification = i18n.t(
-            'notifications.new-private-message',
-            { sender: newMessage.senderId },
-          );
-        } else {
-          notification = i18n.t(
-            'notifications.new-group-message',
-            { members: chat.membersIds.join(', ') },
-          );
-        }
+      if (chat && chat.membersIds.includes(currentUserId)) {
+        const notification = createNewMessageNotification(chat, newMessage, currentUserId);
         this.dispatch('notification/showNotification', notification);
       }
     },

@@ -12,7 +12,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import Navigation from '@/components/navigation/Navigation';
+import Navigation from '@/components/global/Navigation';
 import Notifications from '@/components/global/Notifications';
 
 export default {
