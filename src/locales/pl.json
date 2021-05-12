@@ -3,6 +3,7 @@
     "cancel": "Anuluj",
     "create": "Utwórz",
     "close": "Zamknij",
+    "add": "Dodaj",
     "edit": "Edytuj",
     "save": "Zapisz",
     "or": "lub",
@@ -73,6 +74,13 @@
       "error-message-not-current-user": "Nie musisz dodawać siebie",
       "error-message-not-already-added": "Ten użytkownik jest już dodany",
       "error-message-chat-exists": "Czat z tymi członkami już istnieje"
+    }
+  },
+  "posts": {
+    "create": {
+      "add-new-post": "Dodaj nowy post",
+      "title": "Nowy post",
+      "write-something": "Napisz coś..."
     }
   }
 }

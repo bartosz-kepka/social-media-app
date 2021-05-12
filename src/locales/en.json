@@ -3,6 +3,7 @@
     "cancel": "Cancel",
     "create": "Create",
     "close": "Close",
+    "add": "Add",
     "edit": "Edit",
     "save": "Save",
     "or": "or",
@@ -74,5 +75,12 @@
       "error-message-not-already-added": "This user is already added",
       "error-message-chat-exists": "Chat with these members already exists"
     }
-  }
+  },
+    "posts": {
+      "create": {
+        "add-new-post": "Add new post",
+        "title": "New Post",
+        "write-something": "Write something..."
+      }
+    }
 }
