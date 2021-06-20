@@ -21,9 +21,20 @@
   "login": {
     "title": "Zaloguj się",
     "name": "Imię",
+    "email": "Email",
+    "password": "Hasło",
     "log-in": "Zaloguj",
+    "register": "Zarejestruj",
     "error-name-min-length": "Imię musi zawierać conajmniej 4 znaki",
-    "error-name-required": "Imię jest wymagane"
+    "error-email": "Zły email",
+    "error-password-min-length": "Hasło musi zawierać co najmniej 6 znaków",
+    "error-name-required": "Imię jest wymagane",
+    "error-password-required": "Hasło jest wymagane",
+    "error-login": "Błędna nazwa użytkonika lub hasło."
+  },
+  "register": {
+    "registerTitle": "Zarejestruj się",
+    "back-to-login": "Powrót do strony logowania"
   },
   "chat": {
     "list": {

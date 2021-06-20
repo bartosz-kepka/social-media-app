@@ -21,9 +21,20 @@
   "login": {
     "title": "Please log in",
     "name": "Name",
+    "email": "Email",
+    "password": "Password",
     "log-in": "Log in",
+    "register": "Register",
     "error-name-min-length": "Name must be at least 4 characters long",
-    "error-name-required": "Name is required"
+    "error-email": "Wrong email",
+    "error-password-min-length": "Password must be at least 6 characters long",
+    "error-name-required": "Name is required",
+    "error-password-required": "Password is required",
+    "error-login": "Invalid username or password"
+  },
+  "register": {
+    "registerTitle": "Please sign in",
+    "back-to-login": "Go back to login page"
   },
   "chat": {
     "list": {

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import user from '@/store/modules/user';
+import { auth } from './modules/auth.module';
 import chat from '@/store/modules/chat';
 import notification from '@/store/modules/notification';
 
@@ -12,6 +13,7 @@ export default new Vuex.Store({
   mutations: {},
   actions: {},
   modules: {
+    auth,
     user,
     chat,
     notification,

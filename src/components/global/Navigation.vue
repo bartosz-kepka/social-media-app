@@ -137,10 +137,11 @@ export default {
     },
   },
   methods: {
+
     logOut() {
       this.drawer = false;
       this.$store.dispatch('user/clearUser');
-      this.$router.push({ name: 'Login' });
+      window.location.reload(true);
     },
   },
 };
