@@ -1,179 +1,127 @@
 <template>
-  <div>
+  <v-container class="container pa-0 pt-3">
     <v-form
-      @submit.prevent="handleLogin"
+        @submit.prevent="login"
+        class="form d-flex flex-column"
     >
-      <div class="text-h4 mb-3">
+      <div class="text-h4">
         {{ $t('login.title') }}
       </div>
-      <v-row>
-        <v-col
-          cols="12"
-          lg="4"
-          md="6"
-          sm="9"
-          xl="3"
-        >
-          <v-text-field
-            v-model.trim="user.username"
-            :error-messages="nameErrors"
-            :label="$t('login.name')"
-            outlined
-            required
-            @blur="this.$v.user.username.$touch()"
-            @input="this.$v.user.username.$touch()"
-          />
-          <v-text-field
-            v-model.trim="user.password"
-            :error-messages="passwordErrors"
-            :label="this.$t('login.password')"
-            type="password"
-            outlined
-            required
-            @blur="this.$v.user.password.$touch()"
-            @input="this.$v.user.password.$touch()"
-          />
-        </v-col>
-        <v-col
-          cols="12"
-          lg="1"
-          md="3"
-          sm="3"
-        >
-          <v-btn
-            color="primary"
-            type="submit"
-          >
-            {{ $t('login.log-in') }}
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-form>
-    <v-form
-      @submit.prevent="register"
-    >
+      <v-text-field
+          v-model.trim="credentials.email"
+          :error-messages="emailErrors"
+          :label="$t('general.email')"
+          outlined
+          required
+          @blur="$v.credentials.email.$touch()"
+          @input="$v.credentials.email.$touch()"
+      />
+      <v-text-field
+          v-model.trim="credentials.password"
+          :error-messages="passwordErrors"
+          :label="this.$t('general.password')"
+          type="password"
+          outlined
+          required
+          @blur="$v.credentials.password.$touch()"
+          @input="$v.credentials.password.$touch()"
+      />
       <v-btn
-        color="primary"
-        type="submit"
+          color="primary"
+          type="submit"
+      >
+        {{ $t('login.log-in') }}
+      </v-btn>
+      <div class="d-flex align-center">
+        <v-divider class="mr-3"></v-divider>
+        {{ this.$t('general.or') }}
+        <v-divider class="ml-3"></v-divider>
+      </div>
+      <v-btn
+          color="primary"
+          @click="goToRegister"
       >
         {{ $t('login.register') }}
       </v-btn>
     </v-form>
-  </div>
+  </v-container>
 </template>
 
 <script>
-import {minLength, required} from 'vuelidate/lib/validators';
-import User from '../store/user';
-import {mapGetters} from 'vuex';
+import { required, email } from 'vuelidate/lib/validators';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Login',
   data() {
     return {
-      user: new User('', ''),
-      loading: false,
-      message: '',
+      credentials: {
+        email: '',
+        password: '',
+      },
     };
   },
   computed: {
-
     ...mapGetters({
-      loggedIn: 'auth/login',
+      loading: 'user/loading',
     }),
-
-    nameErrors() {
+    emailErrors() {
       const errors = [];
-      if (this.$v.user.$dirty) {
+      if (!this.$v.credentials.email.$dirty) {
         return errors;
       }
-      if (!this.$v.user.username.minLength) {
-        errors.push(this.$t('login.error-name-min-length'));
+      if (!this.$v.credentials.email.required) {
+        errors.push(this.$t('login.error-email-required'));
       }
-      if (!this.$v.user.username.required) {
-        errors.push(this.$t('login.error-name-required'));
+      if (!this.$v.credentials.email.email) {
+        errors.push(this.$t('login.error-email-format'));
       }
       return errors;
     },
-
     passwordErrors() {
       const errors = [];
-      if (!this.$v.user.password.$dirty) {
+      if (!this.$v.credentials.password.$dirty) {
         return errors;
       }
-      if (!this.$v.user.password.minLength) {
-        errors.push(this.$t('login.error-password-min-length'));
-      }
-      if (!this.$v.user.password.required) {
+      if (!this.$v.credentials.password.required) {
         errors.push(this.$t('login.error-password-required'));
       }
       return errors;
     },
   },
   methods: {
-
-    handleLogin() {
-
-      this.loading = true;
-      this.$v.$touch();
-      if (this.$v.$invalid) {
-        this.loading = false;
-        return;
-      }
-        if (this.user.username && this.user.password) {
-
-          this.$store.dispatch('auth/login', this.user).then(
-              () => {
-
-                const user = {
-                  name: this.user.username,
-                };
-                this.$store.dispatch('user/setUser', user);
-                this.$router.push({name: 'Home'});
-              },
-              error => {
-                this.loading = false;
-                this.message =
-                    (error.response && error.response.data) ||
-                    error.message ||
-                    error.toString();
-                alert(error.response.data.message);
-              }
-          );
-        }
+    goToRegister() {
+      this.$router.push({ name: 'Register' });
     },
-
-    register() {
-      this.$router.push({name: 'Register'});
-    },
-
     login() {
       this.$v.$touch();
       if (this.$v.$invalid) {
         return;
       }
-      const user = {
-        name: this.name,
-      };
-      this.$store.dispatch('user/setUser', user);
-      this.$router.push({name: 'Home'});
+      this.$store.dispatch('user/logIn', this.credentials)
+          .then(() => this.$router.push({ name: 'Home' }));
     },
   },
-
   validations: {
-    user: {
-      username: {
-        minLength: minLength(4),
-        required
+    credentials: {
+      email: {
+        required,
+        email,
       },
       password: {
-        minLength: minLength(4),
-        required
+        required,
       },
     },
-  }
+  },
 };
 </script>
 
 <style scoped lang="scss">
+.container {
+  max-width: 560px;
+
+  .form {
+    gap: 12px;
+  }
+}
 </style>

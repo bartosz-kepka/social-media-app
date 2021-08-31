@@ -1,15 +1,15 @@
 <template>
   <div class="main-container px-3">
     <v-alert
-      v-for="notification in notifications"
-      :key="notification.id"
-      border="left"
-      class="notification"
-      dense
-      dismissible
-      icon="mdi-message-alert"
-      type="info"
-      @input="closeNotification(notification.id)"
+        v-for="notification in notifications"
+        :key="notification.id"
+        border="left"
+        class="notification"
+        dense
+        dismissible
+        icon="mdi-message-alert"
+        :type="notification.type"
+        @input="closeNotification(notification.id)"
     >
       {{ notification.message }}
     </v-alert>
@@ -45,7 +45,7 @@ export default {
   @include respond-to($xs) {
     width: 100%;
   }
-  
+
   .notification {
     word-wrap: normal;
     overflow-wrap: anywhere;

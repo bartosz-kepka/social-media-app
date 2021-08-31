@@ -4,8 +4,6 @@ import VueVirtualScroller from 'vue-virtual-scroller';
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
 import DisableAutocomplete from 'vue-disable-autocomplete';
 
-import VeeValidate from 'vee-validate';
-
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -17,12 +15,11 @@ import VueSocketIOExt from 'vue-socket.io-extended';
 import io from 'socket.io-client';
 
 const socket = io('http://localhost:8180/', {
-  autoConnect: false
+  autoConnect: false,
 });
 
 Vue.config.productionTip = false;
 Vue.use(Vuelidate);
-Vue.use(VeeValidate);
 Vue.use(VueVirtualScroller);
 Vue.use(DisableAutocomplete);
 Vue.use(VueSocketIOExt, socket, { store });

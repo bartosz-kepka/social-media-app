@@ -12,66 +12,66 @@ import Login from '@/views/Login';
 Vue.use(VueRouter);
 
 const routes = [
-    {
-        path: '/',
-        redirect: {name: 'Home'},
-    },
-    {
-        path: '/login',
-        name: 'Login',
-        component: Login,
-    },
-    {
-        path: '/home',
-        name: 'Home',
-        component: Home,
-    },
-    {
-        path: '/chat',
-        name: 'ChatList',
-        component: ChatList,
-    },
-    {
-        path: '/chat/:chatId',
-        name: 'Chat',
-        component: ChatConversation,
-    },
-    {
-        path: '/profile',
-        name: 'Profile',
-        component: Profile,
-    },
-    {
-        path: '/register',
-        name: 'Register',
-        component: Register,
-    },
+  {
+    path: '/',
+    redirect: { name: 'Home' },
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+  },
+  {
+    path: '/home',
+    name: 'Home',
+    component: Home,
+  },
+  {
+    path: '/chat',
+    name: 'ChatList',
+    component: ChatList,
+  },
+  {
+    path: '/chat/:chatId',
+    name: 'Chat',
+    component: ChatConversation,
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: Profile,
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register,
+  },
 ];
 
 const router = new VueRouter({
-    mode: 'history',
-    base: process.env.BASE_URL,
-    routes,
+  mode: 'history',
+  base: process.env.BASE_URL,
+  routes,
 });
 
 const publicRoutes = ['Login', 'Register'];
 
 router.beforeEach((to, from, next) => {
-        const isAuthenticated = store.getters['user/isAuthenticated'];
+    const isAuthenticated = store.getters['user/isAuthenticated'];
+    const toPublicRoute = publicRoutes.includes(to.name);
 
-        const toPrivateRoute = !publicRoutes.includes(to.name);
-
-        if (toPrivateRoute && !isAuthenticated) {
-            next({name: 'Login'});
-            return;
-        }
-
-        if (!toPrivateRoute && isAuthenticated) {
-            next({name: 'Home'});
-            return;
-        }
-        next();
+    if (!toPublicRoute && !isAuthenticated) {
+      next({ name: 'Login' });
+      return;
     }
-)
+
+    if (toPublicRoute && isAuthenticated) {
+      next({ name: 'Home' });
+      return;
+    }
+
+    next();
+  },
+);
 
 export default router;

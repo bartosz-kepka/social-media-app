@@ -2,7 +2,12 @@
   "general": {
     "cancel": "Cancel",
     "create": "Create",
-    "close": "Close"
+    "close": "Close",
+    "or": "or",
+    "email": "Email",
+    "password": "Password",
+    "first-name": "First name",
+    "last-name": "Last name"
   },
   "navigation": {
     "home": "Home",
@@ -16,25 +21,33 @@
     "new-private-message": "New private message from {sender}",
     "new-group-message": "New message from {sender} in group chat with {members}",
     "new-private-chat": "{creator} created a private chat with you",
-    "new-group-chat": "{creator} created a group chat with {otherMembers} and you"
+    "new-group-chat": "{creator} created a group chat with {otherMembers} and you",
+    "account-created": "Account has been created successfully. You can now log in"
   },
   "login": {
-    "title": "Please log in",
-    "name": "Name",
-    "email": "Email",
-    "password": "Password",
+    "title": "Log in",
     "log-in": "Log in",
-    "register": "Register",
-    "error-name-min-length": "Name must be at least 4 characters long",
-    "error-email": "Wrong email",
-    "error-password-min-length": "Password must be at least 6 characters long",
-    "error-name-required": "Name is required",
-    "error-password-required": "Password is required",
-    "error-login": "Invalid username or password"
+    "register": "Create a new account",
+    "error-email-required": "Email is required",
+    "error-email-format": "It's not a valid email format",
+    "error-password-required": "Password is required"
   },
   "register": {
-    "registerTitle": "Please sign in",
-    "back-to-login": "Go back to login page"
+    "title": "Create a new account",
+    "repeat-password": "Repeat password",
+    "register": "Register",
+    "login-to-existing-account": "Log in to an existing account",
+    "error-email-required": "Email is required",
+    "error-email-format": "Invalid email format",
+    "error-password-required": "Password is required",
+    "error-password-min-length": "Password must be at least 6 characters long",
+    "error-password-uppercase": "Password must contain an uppercase character",
+    "error-password-lowercase": "Password must contain an lowercase character",
+    "error-password-number": "Password must contain an number",
+    "error-repeat-password-required": "Repeat password",
+    "error-repeat-password-match": "Passwords must match",
+    "error-first-name-required": "First name is required",
+    "error-last-name-required": "Last name is required"
   },
   "chat": {
     "list": {

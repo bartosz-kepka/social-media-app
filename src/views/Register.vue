@@ -1,191 +1,226 @@
 <template>
-  <v-form
-    @submit.prevent="handleRegister"
-  >
-    <div class="text-h4 mb-3">
-      {{ $t('register.registerTitle') }}
-    </div>
-    <v-row>
-      <v-col
-        cols="12"
-        lg="4"
-        md="6"
-        sm="9"
-        xl="3"
-      >
-        <v-text-field
-          v-model.trim="user.username"
-          :error-messages="nameErrors"
-          :label="$t('login.name')"
-          outlined
-          required
-          @blur="$v.user.username.$touch()"
-          @input="$v.user.username.$touch()"
-        />
-        <v-text-field
-          v-model.trim="user.email"
+  <v-container class="container pa-0 pt-3">
+    <v-form
+        @submit.prevent="register"
+        class="form d-flex flex-column"
+    >
+      <div class="text-h4">
+        {{ $t('register.title') }}
+      </div>
+      <v-text-field
+          v-model.trim="newAccount.email"
           :error-messages="emailErrors"
-          :label="$t('login.email')"
+          :label="$t('general.email')"
           outlined
           required
-          @blur="$v.user.username.$touch()"
-          @input="$v.user.username.$touch()"
-        />
-        <v-text-field
-          v-model.trim="user.password"
+          @blur="$v.newAccount.email.$touch()"
+          @input="$v.newAccount.email.$touch()"
+      />
+      <v-text-field
+          v-model.trim="newAccount.password"
           :error-messages="passwordErrors"
-          :label="$t('login.password')"
+          :label="$t('general.password')"
           outlined
           required
           type="password"
-          @blur="$v.user.password.$touch()"
-          @input="$v.user.password.$touch()"
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        lg="1"
-        md="3"
-        sm="3"
-      >
-        <v-btn
+          @blur="$v.newAccount.password.$touch()"
+          @input="$v.newAccount.password.$touch()"
+      />
+      <v-text-field
+          v-model.trim="newAccount.repeatPassword"
+          :error-messages="repeatPasswordErrors"
+          :label="$t('register.repeat-password')"
+          outlined
+          required
+          type="password"
+          @blur="$v.newAccount.repeatPassword.$touch()"
+          @input="$v.newAccount.repeatPassword.$touch()"
+      />
+      <v-text-field
+          v-model.trim="newAccount.firstName"
+          :error-messages="firstNameErrors"
+          :label="$t('general.first-name')"
+          outlined
+          required
+          @blur="$v.newAccount.firstName.$touch()"
+          @input="$v.newAccount.firstName.$touch()"
+      />
+      <v-text-field
+          v-model.trim="newAccount.lastName"
+          :error-messages="lastNameErrors"
+          :label="$t('general.last-name')"
+          outlined
+          required
+          @blur="$v.newAccount.lastName.$touch()"
+          @input="$v.newAccount.lastName.$touch()"
+      />
+      <v-btn
           color="primary"
           type="submit"
-        >
-          {{ $t('login.register') }}
-        </v-btn>
-      </v-col>
-    </v-row>
-    <v-form
-      @submit.prevent="moveToLogin"
-    >
-      <v-btn
-        color="primary"
-        type="submit"
+          :loading="loading"
       >
-        {{ $t('register.back-to-login') }}
+        {{ $t('register.register') }}
+      </v-btn>
+      <div class="d-flex align-center">
+        <v-divider class="mr-3"></v-divider>
+        {{ this.$t('general.or') }}
+        <v-divider class="ml-3"></v-divider>
+      </div>
+      <v-btn
+          color="primary"
+          @click="goToLogin"
+          :disabled="loading"
+      >
+        {{ $t('register.login-to-existing-account') }}
       </v-btn>
     </v-form>
-  </v-form>
+  </v-container>
 </template>
 
 <script>
-import {minLength, required} from 'vuelidate/lib/validators';
-import User from '../store/user';
-import {mapGetters} from 'vuex';
+import { mapGetters } from 'vuex';
+import { email, minLength, required } from 'vuelidate/lib/validators';
+import { containsLowercase, containsNumber, containsUppercase } from '@/utils/validators';
 
 export default {
   name: 'Register',
+
   data() {
     return {
-      name: '',
-      user: new User('', ''),
-      submitted: false,
-      successful: false,
-      message: '',
+      newAccount: {
+        email: '',
+        password: '',
+        repeatPassword: '',
+        firstName: '',
+        lastName: '',
+      },
     };
   },
   computed: {
-
     ...mapGetters({
-      loggedIn: 'auth/login',
+      loading: 'user/loading',
     }),
-
-    nameErrors() {
-      const errors = [];
-      if (!this.$v.name.$dirty) {
-        return errors;
-      }
-      if (!this.$v.name.minLength) {
-        errors.push(this.$t('login.error-name-min-length'));
-      }
-      if (!this.$v.name.required) {
-        errors.push(this.$t('login.error-name-required'));
-      }
-      return errors;
-    },
-
     emailErrors() {
       const errors = [];
-      if (!this.$v.name.$dirty) {
+      if (!this.$v.newAccount.email.$dirty) {
         return errors;
       }
-      if (!this.$v.name.minLength) {
-        errors.push(this.$t('login.error-email'));
+      if (!this.$v.newAccount.email.required) {
+        errors.push(this.$t('register.error-email-required'));
       }
-      if (!this.$v.name.required) {
-        errors.push(this.$t('login.error-email'));
+      if (!this.$v.newAccount.email.email) {
+        errors.push(this.$t('register.error-email-format'));
       }
       return errors;
     },
-
     passwordErrors() {
       const errors = [];
-      if (!this.$v.name.$dirty) {
+      if (!this.$v.newAccount.password.$dirty) {
         return errors;
       }
-      if (!this.$v.name.minLength) {
-        errors.push(this.$t('login.error-password-min-length'));
+      if (!this.$v.newAccount.password.required) {
+        errors.push(this.$t('register.error-password-required'));
       }
-      if (!this.$v.name.required) {
-        errors.push(this.$t('login.error-password-required'));
+      if (!this.$v.newAccount.password.minLength) {
+        errors.push(this.$t('register.error-password-min-length'));
+      }
+      if (!this.$v.newAccount.password.containsUppercase) {
+        errors.push(this.$t('register.error-password-uppercase'));
+      }
+      if (!this.$v.newAccount.password.containsLowercase) {
+        errors.push(this.$t('register.error-password-lowercase'));
+      }
+      if (!this.$v.newAccount.password.containsNumber) {
+        errors.push(this.$t('register.error-password-number'));
+      }
+      return errors;
+    },
+    repeatPasswordErrors() {
+      const errors = [];
+      if (!this.$v.newAccount.repeatPassword.$dirty) {
+        return errors;
+      }
+      if (!this.$v.newAccount.repeatPassword.required) {
+        errors.push(this.$t('register.error-repeat-password-required'));
+      }
+      if (!this.$v.newAccount.repeatPassword.match) {
+        errors.push(this.$t('register.error-repeat-password-match'));
+      }
+      return errors;
+    },
+    firstNameErrors() {
+      const errors = [];
+      if (!this.$v.newAccount.firstName.$dirty) {
+        return errors;
+      }
+      if (!this.$v.newAccount.firstName.required) {
+        errors.push(this.$t('register.error-first-name-required'));
+      }
+      return errors;
+    },
+    lastNameErrors() {
+      const errors = [];
+      if (!this.$v.newAccount.lastName.$dirty) {
+        return errors;
+      }
+      if (!this.$v.newAccount.lastName.required) {
+        errors.push(this.$t('register.error-last-name-required'));
       }
       return errors;
     },
   },
   methods: {
-
-    moveToLogin() {
-      this.$router.push('/login');
+    goToLogin() {
+      this.$router.push({ name: 'Login' });
     },
-
-    handleRegister() {
-      this.message = '';
-      this.submitted = true;
-      this.$validator.validate().then(isValid => {
-        if (isValid) {
-          this.$store.dispatch('auth/register', this.user).then(
-              data => {
-                this.message = data.message;
-                this.successful = true;
-                alert('Succes');
-                this.$router.push({name: 'Login'});
-              },
-              error => {
-                alert(error.response.data.message);
-
-                this.message =
-                    (error.response && error.response.data && error.response.data.message) ||
-                    error.message ||
-                    error.toString();
-                this.successful = false;
-              }
-          );
-        }
-      });
-    },
-
-    login() {
+    register() {
       this.$v.$touch();
       if (this.$v.$invalid) {
         return;
       }
-      const user = {
-        name: this.name,
-      };
-      this.$store.dispatch('user/setUser', user);
-      this.$router.push({name: 'Home'});
+      const newAccountData = { ...this.newAccount };
+      delete newAccountData.repeatPassword;
+      this.$store.dispatch('user/register', newAccountData).then(
+          () => this.$router.push({ name: 'Login' }),
+      );
     },
   },
   validations: {
-    name: {
-      required,
-      minLength: minLength(4),
+    newAccount: {
+      email: {
+        required,
+        email,
+      },
+      password: {
+        required,
+        minLength: minLength(6),
+        containsUppercase: containsUppercase,
+        containsLowercase: containsLowercase,
+        containsNumber: containsNumber,
+      },
+      repeatPassword: {
+        required,
+        match: function (value) {
+          return value === this.newAccount.password;
+        },
+      },
+      firstName: {
+        required,
+      },
+      lastName: {
+        required,
+      },
     },
   },
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.container {
+  max-width: 560px;
 
+  .form {
+    gap: 12px;
+  }
+}
 </style>

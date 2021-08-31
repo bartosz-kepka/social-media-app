@@ -1,63 +1,73 @@
+import AuthService from '@/services/http/auth.service';
 import i18n from '@/locales/i18n';
-import vuetify from '@/plugins/vuetify';
+import { NOTIFICATION_TYPES } from '@/store/modules/notification';
+import router from '@/router';
 
 export default {
   namespaced: true,
   state: {
-    user: undefined,
+    user: null,
+    token: null,
+    loading: false,
   },
   mutations: {
     setUser(state, user) {
       state.user = user;
     },
-    setLanguage(state, language) {
-      state.user = {
-        ...state.user,
-        language,
-      };
+    setToken(state, token) {
+      state.token = token;
     },
-    setNightMode(state, nightMode) {
-      state.user = {
-        ...state.user,
-        nightMode,
-      };
+    setLoading(state, loading) {
+      state.loading = loading;
     },
-    clearUser(state) {
-      state.user = undefined;
+    clearState(state) {
+      state.user = null;
+      state.token = null;
     },
   },
   actions: {
-    setUser({ commit }, user) {
-      if (user.language) {
-        i18n.locale = user.language;
-      } else {
-        user.language = i18n.locale;
-      }
-      if (user.nightMode !== undefined) {
-        vuetify.framework.theme.dark = user.nightMode;
-      } else {
-        user.nightMode = vuetify.framework.theme.dark;
-      }
-      commit('setUser', user);
-      localStorage.setItem('user', JSON.stringify(user));
+    register({ commit }, newAccount) {
+      commit('setLoading', true);
+      return AuthService.register(newAccount)
+        .then(() => {
+          const message = i18n.t('notifications.account-created');
+          this.dispatch('notification/showNotification', {
+            message,
+            type: NOTIFICATION_TYPES.SUCCESS,
+          });
+        })
+        .finally(() => commit('setLoading', false));
     },
-    setLanguage({ commit, state }, language) {
-      i18n.locale = language;
-      commit('setLanguage', language);
-      localStorage.setItem('user', JSON.stringify(state.user));
+    logIn({ commit }, credentials) {
+      commit('setLoading', true);
+      return AuthService.login(credentials)
+        .then(
+          ({ data: { user, token } }) => {
+            commit('setUser', user);
+            commit('setToken', token);
+            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('token', JSON.stringify(token));
+          })
+        .finally(() => commit('setLoading', false));
     },
-    setNightMode({ commit, state }, nightMode) {
-      vuetify.framework.theme.dark = nightMode;
-      commit('setNightMode', nightMode);
-      localStorage.setItem('user', JSON.stringify(state.user));
-    },
-    clearUser({ commit }) {
-      commit('clearUser');
+    logOut({ commit }) {
+      commit('clearState');
       localStorage.removeItem('user');
+      localStorage.removeItem('token');
+      router.push({ name: 'Login' }).then();
+    },
+    setUser({ commit }, user) {
+      commit('setUser', user);
+    },
+    setToken({ commit }, token) {
+      commit('setToken', token);
     },
   },
   getters: {
     user: state => state.user,
-    isAuthenticated: state => !!state.user,
+    displayName: ({ user }) => user.displayName ?? `${user.firstName} ${user.lastName}`,
+    token: state => state.token,
+    isAuthenticated: state => !!state.token,
+    loading: state => state.loading,
   },
 };
