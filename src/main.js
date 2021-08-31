@@ -15,7 +15,7 @@ import VueSocketIOExt from 'vue-socket.io-extended';
 import io from 'socket.io-client';
 
 const socket = io('http://localhost:8180/', {
-  autoConnect: false
+  autoConnect: false,
 });
 
 Vue.config.productionTip = false;

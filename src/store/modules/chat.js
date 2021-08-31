@@ -1,7 +1,7 @@
 import ChatService from '@/services/http/chat.service';
 import i18n from '@/locales/i18n';
 
-function createNewChatNotification(newChat, currentUserId) {
+function createNewChatNotificationMessage(newChat, currentUserId) {
   let notification;
   const otherMembers = newChat.membersIds.filter(
     memberId => memberId !== currentUserId && memberId !== newChat.creatorId,
@@ -23,7 +23,7 @@ function createNewChatNotification(newChat, currentUserId) {
   return notification;
 }
 
-function createNewMessageNotification(chat, newMessage, currentUserId) {
+function createNewMessageNotificationMessage(chat, newMessage, currentUserId) {
   let notification;
   if (chat.membersIds.length === 2) {
     notification = i18n.t(
@@ -50,7 +50,7 @@ export default {
   state: {
     loading: false,
     chats: [],
-    chat: undefined,
+    chat: null,
   },
   mutations: {
     setLoading(state, loading) {
@@ -63,7 +63,7 @@ export default {
       state.chat = chat;
     },
     clearChat(state) {
-      state.chat = undefined;
+      state.chat = null;
     },
     clearChats(state) {
       state.chats = [];
@@ -78,17 +78,15 @@ export default {
   actions: {
     fetchChats({ commit }) {
       commit('setLoading', true);
-      ChatService.fetchChats().then(response => {
-        commit('setChats', response.data);
-        commit('setLoading', false);
-      });
+      ChatService.fetchChats()
+        .then((response) => commit('setChats', response.data))
+        .finally(() => commit('setLoading', false));
     },
     fetchChat({ commit }, chatId) {
       commit('setLoading', true);
-      ChatService.fetchChat(chatId).then(response => {
-        commit('setChat', response.data);
-        commit('setLoading', false);
-      });
+      ChatService.fetchChat(chatId)
+        .then((response) => commit('setChat', response.data))
+        .finally(() => commit('setLoading', false));
     },
     clearChat({ commit }) {
       commit('clearChat');
@@ -102,17 +100,9 @@ export default {
         membersIds,
       };
       commit('setLoading', true);
-      return ChatService.createChat(newChat).then(
-        response => {
-          commit('setChat', response.data);
-          commit('setLoading', false);
-          return response.data.id;
-        },
-        () => {
-          commit('setLoading', false);
-          return undefined;
-        },
-      );
+      return ChatService.createChat(newChat)
+        .then((response) => commit('setChat', response.data))
+        .finally(() => commit('setLoading', false));
     },
     sendMessage({ rootState, state }, newMessageContent) {
       const newMessage = {
@@ -127,8 +117,8 @@ export default {
       if (newChat.membersIds.includes(currentUserId)) {
         commit('addChat', newChat);
         if (newChat.creatorId !== currentUserId) {
-          const notification = createNewChatNotification(newChat, currentUserId);
-          this.dispatch('notification/showNotification', notification);
+          const message = createNewChatNotificationMessage(newChat, currentUserId);
+          this.dispatch('notification/showNotification', { message });
         }
       }
     },
@@ -141,8 +131,8 @@ export default {
       }
       const chat = state.chats.find(chat => chat.id === chatId);
       if (chat && chat.membersIds.includes(currentUserId)) {
-        const notification = createNewMessageNotification(chat, newMessage, currentUserId);
-        this.dispatch('notification/showNotification', notification);
+        const message = createNewMessageNotificationMessage(chat, newMessage, currentUserId);
+        this.dispatch('notification/showNotification', { message });
       }
     },
   },

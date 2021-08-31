@@ -5,6 +5,7 @@ import store from '@/store';
 import Home from '@/views/Home';
 import ChatList from '@/views/chat/ChatList';
 import Profile from '@/views/Profile';
+import Register from '@/views/Register';
 import ChatConversation from '@/views/chat/ChatConversation';
 import Login from '@/views/Login';
 
@@ -40,6 +41,11 @@ const routes = [
     name: 'Profile',
     component: Profile,
   },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register,
+  },
 ];
 
 const router = new VueRouter({
@@ -48,17 +54,24 @@ const router = new VueRouter({
   routes,
 });
 
+const publicRoutes = ['Login', 'Register'];
+
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = store.getters['user/isAuthenticated'];
-  if (to.name !== 'Login' && !isAuthenticated) {
-    next({ name: 'Login' });
-    return;
-  }
-  if (to.name === 'Login' && isAuthenticated) {
-    next({ name: 'Home' });
-    return;
-  }
-  next();
-})
+    const isAuthenticated = store.getters['user/isAuthenticated'];
+    const toPublicRoute = publicRoutes.includes(to.name);
+
+    if (!toPublicRoute && !isAuthenticated) {
+      next({ name: 'Login' });
+      return;
+    }
+
+    if (toPublicRoute && isAuthenticated) {
+      next({ name: 'Home' });
+      return;
+    }
+
+    next();
+  },
+);
 
 export default router;

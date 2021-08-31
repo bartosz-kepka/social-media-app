@@ -1,49 +1,49 @@
 <template>
   <div>
     <v-app-bar
-      app
-      clipped-left
-      elevate-on-scroll
-      fixed
+        app
+        clipped-left
+        elevate-on-scroll
+        fixed
     >
       <v-app-bar-nav-icon
-        v-if="$vuetify.breakpoint.mdAndDown && isAuthenticated"
-        @click="drawer = true"
+          v-if="$vuetify.breakpoint.mdAndDown && isAuthenticated"
+          @click="drawer = true"
       />
       <v-toolbar-title>{{ $t('navigation.app') }}</v-toolbar-title>
-      <v-spacer />
+      <v-spacer/>
       <v-switch
-        v-model="nightMode"
-        :hide-details="true"
-        :label="$t('navigation.night-mode')"
-        class="night-mode-switch"
+          v-model="nightMode"
+          :hide-details="true"
+          :label="$t('navigation.night-mode')"
+          class="night-mode-switch"
       />
     </v-app-bar>
     <v-navigation-drawer
-      v-if="isAuthenticated"
-      v-model="drawer"
-      app
-      clipped
+        v-if="isAuthenticated"
+        v-model="drawer"
+        app
+        clipped
     >
       <v-list class="py-0">
         <v-list-item
-          class="py-1"
-          link
-          to="/profile"
+            class="py-1"
+            link
+            to="/profile"
         >
-          <Avatar :alt="`${user.name}'s avatar`" />
+          <Avatar :alt="`${displayName}'s avatar`"/>
           <v-list-item-content>
-            <v-list-item-title>{{ user.name }}</v-list-item-title>
+            <v-list-item-title>{{ displayName }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
-      <v-divider />
+      <v-divider/>
       <v-list class="py-0">
         <v-list-item
-          v-for="[icon, translationKey, to] in links"
-          :key="to"
-          :to="to"
-          link
+            v-for="[icon, translationKey, to] in links"
+            :key="to"
+            :to="to"
+            link
         >
           <v-list-item-icon>
             <v-icon x-large>
@@ -58,19 +58,19 @@
       <template v-slot:append>
         <div class="pa-3">
           <v-select
-            v-model="language"
-            :items="languages"
-            :label="$t('navigation.language')"
-            append-icon="mdi-translate"
-            class="mb-3"
-            dense
-            hide-details
-            outlined
+              v-model="language"
+              :items="languages"
+              :label="$t('navigation.language')"
+              append-icon="mdi-translate"
+              class="mb-3"
+              dense
+              hide-details
+              outlined
           />
           <v-btn
-            block
-            color="error"
-            @click="logOut"
+              block
+              color="error"
+              @click="logOut"
           >
             {{ $t('navigation.log-out') }}
           </v-btn>
@@ -109,38 +109,28 @@ export default {
   computed: {
     ...mapGetters({
       isAuthenticated: 'user/isAuthenticated',
-      user: 'user/user',
+      displayName: 'user/displayName',
     }),
     language: {
       get() {
         return this.$i18n.locale;
       },
-      set(val) {
-        if (this.isAuthenticated) {
-          this.$store.dispatch('user/setLanguage', val);
-          return;
-        }
-        this.$i18n.locale = val;
+      set(newLanguage) {
+        this.$store.dispatch('settings/setLanguage', newLanguage);
       },
     },
     nightMode: {
       get() {
         return this.$vuetify.theme.dark;
       },
-      set(val) {
-        if (this.isAuthenticated) {
-          this.$store.dispatch('user/setNightMode', val);
-          return;
-        }
-        this.$vuetify.theme.dark = val;
+      set(isNightMode) {
+        this.$store.dispatch('settings/setNightMode', isNightMode);
       },
     },
   },
   methods: {
     logOut() {
-      this.drawer = false;
-      this.$store.dispatch('user/clearUser');
-      this.$router.push({ name: 'Login' });
+      this.$store.dispatch('user/logOut').then();
     },
   },
 };

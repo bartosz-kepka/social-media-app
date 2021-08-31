@@ -2,7 +2,12 @@
   "general": {
     "cancel": "Anuluj",
     "create": "Utwórz",
-    "close": "Zamknij"
+    "close": "Zamknij",
+    "or": "lub",
+    "email": "Email",
+    "password": "Hasło",
+    "first-name": "Imię",
+    "last-name": "Nazwisko"
   },
   "navigation": {
     "home": "Strona główna",
@@ -16,14 +21,33 @@
     "new-private-message": "Nowa prywatna wiadomość od {sender}",
     "new-group-message": "Nowa wiadomość od {sender} w czacie z {members}",
     "new-private-chat": "{creator} utworzył z Tobą prywatny czat",
-    "new-group-chat": "{creator} utworzył nowy grupowy chat z {otherMembers} oraz Tobą"
+    "new-group-chat": "{creator} utworzył nowy grupowy chat z {otherMembers} oraz Tobą",
+    "account-created": "Konto zostało utworzone pomyślnie. Mozesz się teraz zalogować"
   },
   "login": {
     "title": "Zaloguj się",
-    "name": "Imię",
     "log-in": "Zaloguj",
-    "error-name-min-length": "Imię musi zawierać conajmniej 4 znaki",
-    "error-name-required": "Imię jest wymagane"
+    "register": "Utwórz nowe konto",
+    "error-email-required": "Email jest wymagany",
+    "error-email-format": "Niepoprawny format adresu email",
+    "error-password-required": "Hasło jest wymagane"
+  },
+  "register": {
+    "title": "Utwórz nowe konto",
+    "register": "Zarejestruj",
+    "repeat-password": "Powtórz hasło",
+    "login-to-existing-account": "Zaloguj się do istniejącego konta",
+    "error-email-required": "Email jest wymagany",
+    "error-email-format": "Niepoprawny format adresu email",
+    "error-password-required": "Hasło jest wymagane",
+    "error-password-min-length": "Hasło musi zawierać conajmniej 6 znaków",
+    "error-password-uppercase": "Hasło musi zawierać wielką literę",
+    "error-password-lowercase": "Hasło musi zawierać małą literę",
+    "error-password-number": "Hasło musi zawierać liczbę",
+    "error-repeat-password-required": "Powtórz hasło",
+    "error-repeat-password-match": "Hasła muszą się zgadzać",
+    "error-first-name-required": "Imię jest wymagane",
+    "error-last-name-required": "Nazwisko jest wymagane"
   },
   "chat": {
     "list": {
