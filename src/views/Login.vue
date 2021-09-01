@@ -4,9 +4,16 @@
         @submit.prevent="login"
         class="form d-flex flex-column"
     >
-      <div class="text-h4">
-        {{ $t('login.title') }}
-      </div>
+      <v-row class="mb-0">
+        <v-col cols="12" sm="8">
+          <div class="text-h4">
+            {{ $t('login.title') }}
+          </div>
+        </v-col>
+        <v-col cols="6" sm="4">
+          <LanguageSelect/>
+        </v-col>
+      </v-row>
       <v-text-field
           v-model.trim="credentials.email"
           :error-messages="emailErrors"
@@ -50,9 +57,11 @@
 <script>
 import { required, email } from 'vuelidate/lib/validators';
 import { mapGetters } from 'vuex';
+import LanguageSelect from '@/components/shared/LanguageSelect';
 
 export default {
   name: 'Login',
+  components: { LanguageSelect },
   data() {
     return {
       credentials: {

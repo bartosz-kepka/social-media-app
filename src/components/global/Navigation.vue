@@ -57,20 +57,12 @@
       </v-list>
       <template v-slot:append>
         <div class="pa-3">
-          <v-select
-              v-model="language"
-              :items="languages"
-              :label="$t('navigation.language')"
-              append-icon="mdi-translate"
-              class="mb-3"
-              dense
-              hide-details
-              outlined
-          />
+          <LanguageSelect/>
           <v-btn
               block
               color="error"
               @click="logOut"
+              class="mt-3"
           >
             {{ $t('navigation.log-out') }}
           </v-btn>
@@ -83,23 +75,14 @@
 <script>
 import { mapGetters } from 'vuex';
 import Avatar from '@/components/shared/Avatar';
+import LanguageSelect from '@/components/shared/LanguageSelect';
 
 export default {
   name: 'Navigation',
-  components: { Avatar },
+  components: { LanguageSelect, Avatar },
   data() {
     return {
       drawer: undefined,
-      languages: [
-        {
-          text: 'English',
-          value: 'en',
-        },
-        {
-          text: 'Polski',
-          value: 'pl',
-        },
-      ],
       links: [
         ['mdi-home', 'navigation.home', '/home'],
         ['mdi-forum', 'navigation.chat', '/chat'],
@@ -111,14 +94,6 @@ export default {
       isAuthenticated: 'user/isAuthenticated',
       displayName: 'user/displayName',
     }),
-    language: {
-      get() {
-        return this.$i18n.locale;
-      },
-      set(newLanguage) {
-        this.$store.dispatch('settings/setLanguage', newLanguage);
-      },
-    },
     nightMode: {
       get() {
         return this.$vuetify.theme.dark;
