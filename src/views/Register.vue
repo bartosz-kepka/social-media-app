@@ -4,9 +4,16 @@
         @submit.prevent="register"
         class="form d-flex flex-column"
     >
-      <div class="text-h4">
-        {{ $t('register.title') }}
-      </div>
+      <v-row class="mb-0">
+        <v-col cols="12" sm="8">
+          <div class="text-h4">
+            {{ $t('register.title') }}
+          </div>
+        </v-col>
+        <v-col cols="6" sm="4">
+          <LanguageSelect/>
+        </v-col>
+      </v-row>
       <v-text-field
           v-model.trim="newAccount.email"
           :error-messages="emailErrors"
@@ -81,10 +88,11 @@
 import { mapGetters } from 'vuex';
 import { email, minLength, required } from 'vuelidate/lib/validators';
 import { containsLowercase, containsNumber, containsUppercase } from '@/utils/validators';
+import LanguageSelect from '@/components/shared/LanguageSelect';
 
 export default {
   name: 'Register',
-
+  components: { LanguageSelect },
   data() {
     return {
       newAccount: {
