@@ -6,6 +6,7 @@
     "or": "or",
     "email": "Email",
     "password": "Password",
+    "description": "Description",
     "first-name": "First name",
     "last-name": "Last name",
     "no-results": "No matching results"
@@ -23,6 +24,7 @@
     "new-group-message": "New message from {sender} in group chat with {members}",
     "new-private-chat": "{creator} created a private chat with you",
     "new-group-chat": "{creator} created a group chat with {otherMembers} and you",
+    "update-success": "Account has been updated.",
     "account-created": "Account has been created successfully. You can now log in"
   },
   "login": {

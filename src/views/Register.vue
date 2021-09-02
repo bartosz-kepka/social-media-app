@@ -1,82 +1,88 @@
 <template>
   <v-container class="container pa-0 pt-3">
     <v-form
-        @submit.prevent="register"
-        class="form d-flex flex-column"
+      class="form d-flex flex-column"
+      @submit.prevent="register"
     >
       <v-row class="mb-0">
-        <v-col cols="12" sm="8">
+        <v-col
+          cols="12"
+          sm="8"
+        >
           <div class="text-h4">
             {{ $t('register.title') }}
           </div>
         </v-col>
-        <v-col cols="6" sm="4">
-          <LanguageSelect/>
+        <v-col
+          cols="6"
+          sm="4"
+        >
+          <LanguageSelect />
         </v-col>
       </v-row>
       <v-text-field
-          v-model.trim="newAccount.email"
-          :error-messages="emailErrors"
-          :label="$t('general.email')"
-          outlined
-          required
-          @blur="$v.newAccount.email.$touch()"
-          @input="$v.newAccount.email.$touch()"
+        v-model.trim="newAccount.email"
+        :error-messages="emailErrors"
+        :label="$t('general.email')"
+        outlined
+        required
+        @blur="$v.newAccount.email.$touch()"
+        @input="$v.newAccount.email.$touch()"
       />
       <v-text-field
-          v-model.trim="newAccount.password"
-          :error-messages="passwordErrors"
-          :label="$t('general.password')"
-          outlined
-          required
-          type="password"
-          @blur="$v.newAccount.password.$touch()"
-          @input="$v.newAccount.password.$touch()"
+        v-model.trim="newAccount.password"
+        :error-messages="passwordErrors"
+        :label="$t('general.password')"
+        outlined
+        required
+        type="password"
+        @blur="$v.newAccount.password.$touch()"
+        @input="$v.newAccount.password.$touch()"
       />
       <v-text-field
-          v-model.trim="newAccount.repeatPassword"
-          :error-messages="repeatPasswordErrors"
-          :label="$t('register.repeat-password')"
-          outlined
-          required
-          type="password"
-          @blur="$v.newAccount.repeatPassword.$touch()"
-          @input="$v.newAccount.repeatPassword.$touch()"
+        v-model.trim="newAccount.repeatPassword"
+        :error-messages="repeatPasswordErrors"
+        :label="$t('register.repeat-password')"
+        outlined
+        required
+        type="password"
+        @blur="$v.newAccount.repeatPassword.$touch()"
+        @input="$v.newAccount.repeatPassword.$touch()"
       />
       <v-text-field
-          v-model.trim="newAccount.firstName"
-          :error-messages="firstNameErrors"
-          :label="$t('general.first-name')"
-          outlined
-          required
-          @blur="$v.newAccount.firstName.$touch()"
-          @input="$v.newAccount.firstName.$touch()"
+        v-model.trim="newAccount.firstName"
+        :error-messages="firstNameErrors"
+        :label="$t('general.first-name')"
+        outlined
+        required
+        @blur="$v.newAccount.firstName.$touch()"
+        @input="$v.newAccount.firstName.$touch()"
       />
       <v-text-field
-          v-model.trim="newAccount.lastName"
-          :error-messages="lastNameErrors"
-          :label="$t('general.last-name')"
-          outlined
-          required
-          @blur="$v.newAccount.lastName.$touch()"
-          @input="$v.newAccount.lastName.$touch()"
+        v-model.trim="newAccount.lastName"
+        :error-messages="lastNameErrors"
+        :label="$t('general.last-name')"
+        outlined
+        required
+        @blur="$v.newAccount.lastName.$touch()"
+        @input="$v.newAccount.lastName.$touch()"
       />
       <v-btn
-          color="primary"
-          type="submit"
-          :loading="loading"
+        color="primary"
+        type="submit"
+        :loading="loading"
       >
         {{ $t('register.register') }}
       </v-btn>
       <div class="d-flex align-center">
-        <v-divider class="mr-3"></v-divider>
+        <v-divider class="mr-3" />
         {{ this.$t('general.or') }}
-        <v-divider class="ml-3"></v-divider>
+        <v-divider class="ml-3" />
       </div>
       <v-btn
-          color="primary"
-          @click="goToLogin"
-          :disabled="loading"
+        :disabled="loading"
+        color="primary"
+        @click="goToLogin"
       >
         {{ $t('register.login-to-existing-account') }}
       </v-btn>
