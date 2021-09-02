@@ -1,24 +1,28 @@
 <template>
-  <div class="container">
-    <header class="jumbotron">
-      <h3>
-        <strong>{{ displayName }}</strong> Profile
-      </h3>
-    </header>
-    <p>
-      <strong>Id:</strong>
-      {{ currentUser.id }}
-    </p>
-    <p>
-      <strong>Email:</strong>
-      {{ currentUser.email }}
-    </p>
-    <p>
-      {{ currentUser }}
-    </p>
-    <p>
-      {{ currentUser.id }}
-    </p>
+  <v-container class="container">
+    <v-row class="mb-0">
+      <v-col
+        cols="12"
+        sm="8"
+      >
+        <div class="text-h4">
+          <header class="jumbotron">
+            <h3>
+              <strong>{{ displayName }}</strong> Profile
+            </h3>
+          </header>
+        </div>
+      </v-col>
+    </v-row>
+    <div class="d-flex align-center">
+      <v-divider class="mr-3" />
+    </div>
+
+    <v-text-field
+      v-model.trim="currentUser.lastName"
+      :label="$t('general.last-name')"
+      outlined
+    />
     <p>
       {{ currentUser.firstName }}
     </p>
@@ -30,7 +34,7 @@
     >
       Edit
     </v-btn>
-  </div>
+  </v-container>
 </template>
 
 <script>
