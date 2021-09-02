@@ -16,6 +16,20 @@
     <p>
       {{ currentUser }}
     </p>
+    <p>
+      {{ currentUser.id }}
+    </p>
+    <p>
+      {{ currentUser.firstName }}
+    </p>
+    <p>
+      {{ currentUser.lastName }}
+    </p>
+    <v-btn
+      @click="editUser"
+    >
+      Edit
+    </v-btn>
   </div>
 </template>
 
@@ -30,6 +44,14 @@ export default {
       displayName: 'user/displayName',
     }),
   },
+  methods: {
+    editUser() {
+      this.currentUser.firstName = 'Jan';
+      console.log(this.currentUser);
+      const edited =  this.currentUser ;
+      this.$store.dispatch('user/update', edited)
+    }
+  }
 };
 </script>
 

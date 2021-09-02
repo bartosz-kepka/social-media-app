@@ -38,6 +38,17 @@ export default {
         })
         .finally(() => commit('setLoading', false));
     },
+    update({ commit }, editedAccount) {
+      commit('setLoading', true);
+      return AuthService.update(editedAccount)
+          .then(() => {
+            const message = i18n.t('notifications.account-created');
+            this.dispatch('notification/showNotification', {
+              message,
+              type: NOTIFICATION_TYPES.SUCCESS,
+            });
+          }).finally(() => commit('setLoading', false));
+    },
     logIn({ commit }, credentials) {
       commit('setLoading', true);
       return AuthService.login(credentials)
