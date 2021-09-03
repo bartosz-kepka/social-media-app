@@ -21,6 +21,7 @@ export default {
   computed: {
     ...mapGetters({
       isAuthenticated: 'user/isAuthenticated',
+      token: 'user/token',
     }),
   },
   watch: {
@@ -34,23 +35,31 @@ export default {
   methods: {
     initState() {
       if (this.isAuthenticated) {
-        this.$store.dispatch('chat/fetchChats');
-
         if (this.$socket.disconnected) {
-          this.$socket.client.open();
+          this.openSocket();
         }
+        this.$store.dispatch('chat/fetchChats');
         return;
       }
 
       if (!this.isAuthenticated) {
+        if (this.$socket.connected) {
+          this.closeSocket();
+        }
         this.$store.dispatch('chat/clearChats');
         this.$store.dispatch('notification/hideAll');
-
-        if (this.$socket.connected) {
-          this.$socket.client.close();
-          console.log('Disconnected from socket.io server');
-        }
       }
+    },
+    openSocket() {
+      this.$socket.client.io.opts.query = {
+        token: this.token,
+      };
+      this.$socket.client.connect();
+    },
+    closeSocket() {
+      this.$socket.client.disconnect();
+      this.$socket.client.io.opts.query = {};
+      console.log('Disconnected from socket.io server');
     },
   },
   sockets: {

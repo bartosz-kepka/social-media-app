@@ -3,7 +3,7 @@ import store from '@/store/index';
 import { NOTIFICATION_TYPES } from '@/store/modules/notification';
 
 const $axios = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: process.env.VUE_APP_API_ENDPOINT,
 });
 
 $axios.interceptors.request.use(
