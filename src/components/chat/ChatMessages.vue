@@ -114,7 +114,7 @@ export default {
       this.$refs.scroller?.scrollToBottom();
     },
     isSender(item, user) {
-      return item.senderId === user.name;
+      return item.senderId === user.id;
     },
   },
 };

@@ -130,7 +130,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      user: 'user/user',
+      userId: 'user/userId',
       chats: 'chat/chats',
     }),
     newMemberIdErrors() {
@@ -176,20 +176,20 @@ export default {
     },
     create() {
       this.chatExistsSnackbarShown = false;
-      const newChatMembersIds = [this.user.name, ...this.membersIds].sort();
+      const newChatMembersIds = [this.userId, ...this.membersIds].sort();
       if (this.chatsWithSortedMembersIds.some(chat => isEqual(chat.membersIds, newChatMembersIds))) {
         this.chatExistsSnackbarShown = true;
         return;
       }
       const vm = this;
-      this.$store.dispatch('chat/createChat', newChatMembersIds)
+      this.$store.dispatch('chat/createChat', this.membersIds)
         .then(chatId => chatId && vm.$router.push(`/chat/${chatId}`));
     },
   },
   validations: {
     newMemberId: {
       required,
-      notCurrentUser: (value, vm) => value !== vm.user.name,
+      notCurrentUser: (value, vm) => value !== vm.userId,
       notAlreadyAdded: (value, vm) => vm.membersIds.every(member => member.toLowerCase() !== value.toLowerCase()),
     },
   },
