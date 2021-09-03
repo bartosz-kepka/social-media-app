@@ -22,18 +22,12 @@
               link
           >
             <v-list-item-content>
-              <div
-                  v-for="(member, memberIndex) in chat.membersIds"
-                  :key="member"
+              <UserIdentity
+                  v-for="(memberId, memberIndex) in chat.membersIds"
+                  :key="memberId"
                   :class="{ 'mb-2': memberIndex !== chat.membersIds.length - 1 }"
-                  class="d-flex align-center"
-              >
-                <Avatar
-                    :alt="`${member}'s avatar`"
-                    :size="40"
-                />
-                {{ member }}
-              </div>
+                  :user-identity="userIdentities[memberId]"
+              />
             </v-list-item-content>
           </v-list-item>
           <v-divider
@@ -48,17 +42,18 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import Avatar from '@/components/shared/Avatar';
 import Spinner from '@/components/shared/Spinner';
+import UserIdentity from '@/components/shared/UserIdentity';
 
 export default {
   name: 'ChatMemberList',
-  components: { Avatar, Spinner },
+  components: { UserIdentity, Spinner },
   computed: {
     ...mapGetters({
       userId: 'user/userId',
       chats: 'chat/chats',
       loading: 'chat/loading',
+      userIdentities: 'chat/userIdentities',
     }),
     userChats() {
       if (this.chats.length === 0) {

@@ -1,62 +1,38 @@
 <template>
   <div class="main-container">
-    <Spinner v-if="loading" />
+    <Spinner v-if="loading"/>
     <div
-      v-if="!loading && messages.length === 0"
-      class="no-messages text-h6"
+        v-if="!loading && messages.length === 0"
+        class="no-messages text-h6"
     >
       {{ $t('chat.conversation.no-messages') }}
     </div>
     <v-sheet
-      class="pa-3"
-      outlined
-      rounded
+        class="pa-3"
+        outlined
+        rounded
     >
       <DynamicScroller
-        ref="scroller"
-        :buffer="100"
-        :class="{'hidden' : !initComplete}"
-        :items="messages"
-        :min-item-size="20"
-        class="scrollable"
+          ref="scroller"
+          :buffer="100"
+          :class="{'hidden' : !initComplete}"
+          :items="messages"
+          :min-item-size="20"
+          class="scrollable"
       >
         <template v-slot="{ item, index, active }">
           <DynamicScrollerItem
-            :active="active"
-            :data-index="item.id"
-            :item="item"
-            :size-dependencies="[
+              :active="active"
+              :data-index="item.id"
+              :item="item"
+              :size-dependencies="[
               item.content,
             ]"
           >
-            <div
-              :class="isSender(item, user) ? 'justify-end' : ''"
-              class="d-flex"
-            >
-              <v-tooltip
-                :left="isSender(item, user)"
-                :right="!isSender(item, user)"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-sheet
-                    v-bind="attrs"
-                    :color="isSender(item, user) ? 'primary' : 'secondary'"
-                    class="message-item pa-2 ma-1"
-                    rounded
-                    v-on="on"
-                  >
-                    <div
-                      v-if="!isSender(item, user) && chat.membersIds.length > 2"
-                      class="text-caption"
-                    >
-                      {{ item.senderId }}
-                    </div>
-                    <div>{{ item.content }}</div>
-                  </v-sheet>
-                </template>
-                <span>{{ item.date | datetime }}</span>
-              </v-tooltip>
-            </div>
+            <ChatMessage
+                :message="item"
+                :more-than-two-members="chat.membersIds.length > 2"
+            />
           </DynamicScrollerItem>
         </template>
       </DynamicScroller>
@@ -68,10 +44,11 @@
 import { mapGetters } from 'vuex';
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller';
 import Spinner from '@/components/shared/Spinner';
+import ChatMessage from '@/components/chat/ChatMessage';
 
 export default {
   name: 'Messages',
-  components: { Spinner, DynamicScroller, DynamicScrollerItem },
+  components: { ChatMessage, Spinner, DynamicScroller, DynamicScrollerItem },
   data() {
     return {
       initComplete: false,
@@ -79,10 +56,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      loading: 'chat/loading',
       chat: 'chat/chat',
+      loading: 'chat/loading',
       messages: 'chat/chatMessages',
-      user: 'user/user',
     }),
   },
   watch: {
@@ -112,9 +88,6 @@ export default {
     },
     scrollToBottom() {
       this.$refs.scroller?.scrollToBottom();
-    },
-    isSender(item, user) {
-      return item.senderId === user.id;
     },
   },
 };
