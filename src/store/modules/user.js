@@ -65,6 +65,7 @@ export default {
   },
   getters: {
     user: state => state.user,
+    userId: state => state.user.id,
     displayName: ({ user }) => user.displayName ?? `${user.firstName} ${user.lastName}`,
     token: state => state.token,
     isAuthenticated: state => !!state.token,
