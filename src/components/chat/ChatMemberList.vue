@@ -7,47 +7,23 @@
     >
       {{ $t(titleKey, { count: userChats.length }) }}
     </div>
-    <v-sheet
-        v-if="userChats.length > 0"
-        outlined
-        rounded
-    >
-      <v-list class="py-0">
-        <template
-            v-for="(chat, chatIndex) in userChats"
-        >
-          <v-list-item
-              :key="chat.id"
-              :to="`/chat/${chat.id}`"
-              link
-          >
-            <v-list-item-content>
-              <UserIdentity
-                  v-for="(memberId, memberIndex) in chat.membersIds"
-                  :key="memberId"
-                  :class="{ 'mb-2': memberIndex !== chat.membersIds.length - 1 }"
-                  :user-identity="userIdentities[memberId]"
-              />
-            </v-list-item-content>
-          </v-list-item>
-          <v-divider
-              v-if="chatIndex !== userChats.length - 1"
-              :key="chatIndex"
-          />
-        </template>
-      </v-list>
-    </v-sheet>
+    <UserGroupList
+        :user-groups="userChats"
+        :user-identities="userIdentities"
+        :get-users-ids="(chat) => chat.membersIds"
+        :get-redirect-link="(chat) => `/chat/${chat.id}`"
+    />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import Spinner from '@/components/shared/Spinner';
-import UserIdentity from '@/components/shared/UserIdentity';
+import UserGroupList from '@/components/shared/UserGroupList/UserGroupList';
 
 export default {
   name: 'ChatMemberList',
-  components: { UserIdentity, Spinner },
+  components: { UserGroupList, Spinner },
   computed: {
     ...mapGetters({
       userId: 'user/userId',

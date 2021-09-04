@@ -2,7 +2,7 @@ import ChatService from '@/services/http/chat.service';
 import i18n from '@/locales/i18n';
 import { normalizeUserIdentities } from '@/utils/identity';
 
-function createNewChatNotificationMessage(newChat, currentUserId) {
+function createNewChatNotificationMessage(newChat, currentUserId, userIdentities) {
   let notification;
   const otherMembers = newChat.membersIds.filter(
     memberId => memberId !== currentUserId && memberId !== newChat.creatorId,
@@ -10,36 +10,38 @@ function createNewChatNotificationMessage(newChat, currentUserId) {
   if (otherMembers.length === 0) {
     notification = i18n.t(
       'notifications.new-private-chat',
-      { creator: newChat.creatorId },
+      { creator: userIdentities[newChat.creatorId].fullName },
     );
   } else {
+    const otherMembersFullNames = otherMembers.map((memberId) => userIdentities[memberId].fullName);
     notification = i18n.t(
       'notifications.new-group-chat',
       {
-        creator: newChat.creatorId,
-        otherMembers: otherMembers.join(', '),
+        creator: userIdentities[newChat.creatorId].fullName,
+        otherMembers: otherMembersFullNames.join(', '),
       },
     );
   }
   return notification;
 }
 
-function createNewMessageNotificationMessage(chat, newMessage, currentUserId) {
+function createNewMessageNotificationMessage(chat, newMessage, currentUserId, userIdentities) {
   let notification;
   if (chat.membersIds.length === 2) {
     notification = i18n.t(
       'notifications.new-private-message',
-      { sender: newMessage.senderId },
+      { sender: userIdentities[newMessage.senderId].fullName },
     );
   } else {
     const otherMembers = chat.membersIds.filter(
       memberId => memberId !== currentUserId && memberId !== newMessage.senderId,
     );
+    const otherMembersFullNames = otherMembers.map((memberId) => userIdentities[memberId].fullName);
     notification = i18n.t(
       'notifications.new-group-message',
       {
-        sender: newMessage.senderId,
-        members: otherMembers.join(', '),
+        sender: userIdentities[newMessage.senderId].fullName,
+        members: otherMembersFullNames.join(', '),
       },
     );
   }
@@ -124,12 +126,12 @@ export default {
       });
     },
     // socket.io usage: https://www.npmjs.com/package/vue-socket.io-extended
-    socket_newChat({ commit, rootState }, { payload: newChat, userIdentities }) {
+    socket_newChat({ commit, rootState, state }, { payload: newChat, userIdentities }) {
       commit('addChat', newChat);
       commit('addUserIdentities', userIdentities);
       const userId = rootState.user.user.id;
       if (newChat.creatorId !== userId) {
-        const message = createNewChatNotificationMessage(newChat, newChat);
+        const message = createNewChatNotificationMessage(newChat, userId, state.userIdentities);
         this.dispatch('notification/showNotification', { message });
       }
     },
@@ -141,7 +143,7 @@ export default {
         return;
       }
       const chat = state.chats.find(chat => chat.id === chatId);
-      const message = createNewMessageNotificationMessage(chat, newMessage, userId);
+      const message = createNewMessageNotificationMessage(chat, newMessage, userId, state.userIdentities);
       this.dispatch('notification/showNotification', { message });
     },
   },

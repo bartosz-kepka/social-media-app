@@ -7,7 +7,8 @@
     "email": "Email",
     "password": "Password",
     "first-name": "First name",
-    "last-name": "Last name"
+    "last-name": "Last name",
+    "no-results": "No matching results"
   },
   "navigation": {
     "home": "Home",
@@ -61,9 +62,10 @@
     },
     "create": {
       "title": "Create new chat",
-      "subtitle": "Add members",
-      "member-name": "Member name",
-      "error-message-required": "You must provide member name",
+      "subtitle": "Added members",
+      "search-users": "Search users below",
+      "user": "User",
+      "error-message-required": "Provide user name",
       "error-message-not-current-user": "You don't have to add yourself",
       "error-message-not-already-added": "This user is already added",
       "error-message-chat-exists": "Chat with these members already exists"
