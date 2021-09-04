@@ -3,10 +3,10 @@
       class="d-flex align-center"
   >
     <Avatar
-        :alt="`${userIdentity.fullName}'s avatar`"
+        :alt="`${userIdentity && userIdentity.fullName}'s avatar`"
         :size="avatarSize"
     />
-    {{ userIdentity.fullName }}
+    {{ userIdentity && userIdentity.fullName }}
   </div>
 </template>
 
