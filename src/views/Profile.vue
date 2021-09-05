@@ -2,8 +2,8 @@
   <v-container class="container">
     <v-row class="mb-0">
       <v-col
-          cols="12"
-          sm="8"
+        cols="12"
+        sm="8"
       >
         <div class="text-h4">
           <header class="jumbotron">
@@ -33,21 +33,6 @@
       :label="$t('general.description')"
       outlined
     />
-    <p>
-      {{ currentUser.firstName }}
-    </p>
-    <p>
-      {{ currentUser.description }}
-    </p>
-    <p>
-      {{ currentUser.lastName }}
-    </p>
-    <p>
-      {{ currentUser.password }}
-    </p>
-    <p>
-      {{ currentUser.email }}
-    </p>
     <v-btn
       @click="editUser"
     >
