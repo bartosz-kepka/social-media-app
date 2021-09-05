@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     editUser() {
-      this.currentUser.firstName = 'Jan';
+      //this.currentUser.firstName = 'Jan';
       console.log(this.currentUser);
       const edited =  this.currentUser ;
       this.$store.dispatch('user/update', edited)
