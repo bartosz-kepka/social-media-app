@@ -42,7 +42,7 @@ export default {
       commit('setLoading', true);
       return AuthService.update(editedAccount)
           .then(() => {
-            const message = i18n.t('notifications.account-created');
+            const message = i18n.t('notifications.update-success');
             this.dispatch('notification/showNotification', {
               message,
               type: NOTIFICATION_TYPES.SUCCESS,
