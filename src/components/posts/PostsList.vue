@@ -1,141 +1,155 @@
 <template>
-  <div>
+  <Spinner v-if="loading"/>
+  <div v-else>
     <v-list
-      class="py-0 mb-12"
-      outlined
-      rounded
-      width="100%"
-      color="transparent"
+        class="pa-0 mb-12"
+        outlined
+        rounded
+        width="100%"
+        color="transparent"
     >
       <template v-for="(post) in posts">
         <v-list-item
-          :key="post.id"
+            :key="post.id"
+            class="px-0 py-0 ma-0"
         >
-          <v-list-item-content>
+          <v-list-item-content :class="{'py-2': $vuetify.breakpoint.md, 'py-1': $vuetify.breakpoint.smAndDown}">
             <v-card
-              class="pa-5"
-              min-height="90"
+                class="pt-1 pb-2 px-3"
+                min-height="88"
+                outlined
             >
-              {{ post.content }}
+              <v-card-title class="pa-0 ma-0">
+                <UserIdentity :user-identity="userIdentities[post.creatorId]" />
+              </v-card-title>
+              <div class="ml-10">
+                {{ post.content }}
+              </div>
             </v-card>
           </v-list-item-content>
-          <v-btn
-            class="ma-2"
-            icon
-            color="primary"
-            @click="giveReaction(post.id, 'like')"
-          >
-            <v-icon>mdi-thumb-up</v-icon>
-          </v-btn>
-          {{ showReactions(post.reactions, 'like') }}
-          <v-btn
-            class="ma-2"
-            color="error"
-            icon
-            @click="giveReaction(post.id, 'dislike')"
-          >
-            <v-icon>mdi-thumb-down</v-icon>
-          </v-btn>
-          {{ showReactions(post.reactions, 'dislike') }}
+          <div class="d-flex flex-column justify-center align-center">
+            <div>
+              <v-btn
+                  class="ma-1"
+                  icon
+                  :outlined="post.reactions[userId] === 'like'"
+                  color="primary"
+                  @click="giveReaction(post.id, 'like')"
+              >
+                <v-icon>mdi-thumb-up</v-icon>
+              </v-btn>
+              {{ showReactions(post.reactions, 'like') }}
+            </div>
+            <div>
+              <v-btn
+                  class="ma-1"
+                  color="error"
+                  icon
+                  :outlined="post.reactions[userId] === 'dislike'"
+                  @click="giveReaction(post.id, 'dislike')"
+              >
+                <v-icon>mdi-thumb-down</v-icon>
+              </v-btn>
+              {{ showReactions(post.reactions, 'dislike') }}
+            </div>
+          </div>
         </v-list-item>
       </template>
     </v-list>
-    <v-bottom-navigation
-      fixed
-      background-color="transparent"
-    >
+    <div class="pagination-container">
       <v-pagination
-        v-model="page"
-        :length="totalPages"
-        total-visible="5"
-        next-icon="mdi-menu-right"
-        prev-icon="mdi-menu-left"
-        @input="handlePageChange"
+          :value="page + 1"
+          :length="totalPages"
+          total-visible="5"
+          next-icon="mdi-menu-right"
+          prev-icon="mdi-menu-left"
+          @input="handlePageChange"
+          class="pagination"
       />
-    </v-bottom-navigation>
+    </div>
   </div>
 </template>
 
 <script>
-import PostService from '../../services/http/post.service';
+import { mapGetters } from 'vuex';
+import Spinner from '@/components/shared/Spinner';
+import UserIdentity from '@/components/shared/UserIdentity';
 
 export default {
   name: 'PostList',
-  data() {
-    return {
-      posts: [],
-      page: 1,
-      totalPages: 0,
-      pageSize: 8,
-    }
+  components: { UserIdentity, Spinner },
+  computed: {
+    ...mapGetters({
+      loading: 'post/loading',
+      posts: 'post/posts',
+      userIdentities: 'post/userIdentities',
+      page: 'post/page',
+      totalPages: 'post/totalPages',
+      pageSize: 'post/pageSize',
+      userId: 'user/userId',
+    }),
   },
   mounted() {
-    this.getPosts()
+    this.getPosts();
   },
   methods: {
-    giveReaction(id, type) {
-      this.$store.dispatch('post/makeReaction', {
-        postId: id,
-        type,
-      });
+    giveReaction(postId, type) {
+      this.$store.dispatch('post/makeReaction', { postId, type });
     },
+    showReactions(reactions, type) {
+      let reactionsArr = Object.values(reactions);
+      let reaction = 0;
 
-    showReactions(reactions, type){
-      let reactionsObj = Object.assign({}, reactions)
-      let reactionsArr = Object.values(reactionsObj)
-      let reaction = 0
-
-      for(let i = 0; i < reactionsArr.length; i++){
-        if(reactionsArr[i] === type) reaction++
+      for (let i = 0; i < reactionsArr.length; i++) {
+        if (reactionsArr[i] === type) reaction++;
       }
-      return reaction
+      return reaction;
     },
-
-    getRequestParams(page, pageSize) {
-      let params = {};
-
-      if (page) {
-        params['page'] = page - 1;
-      }
-
-      if (pageSize) {
-        params['size'] = pageSize;
-      }
-
-      return params;
+    getPosts(params) {
+      this.$store.dispatch('post/fetchPostsPage', params).then();
+      console.log(this.posts);
     },
-
-    getPosts(){
-      const params = this.getRequestParams(
-          this.page,
-          this.pageSize
-      );
-
-     PostService.getPosts({params})
-          .then((response) => {
-
-            const { posts, totalPages } = response.data;
-            this.posts = posts;
-            this.totalPages = totalPages;
-          })
+    handlePageChange(page) {
+      this.getPosts({ page: page - 1 });
     },
-    handlePageChange(value) {
-      this.page = value;
-      this.getPosts();
-    },
-
-    handlePageSizeChange(size) {
-      this.pageSize = size;
-      this.page = 1;
-      this.getPosts();
-    },
-
-  }
-}
+  },
+};
 
 </script>
 
 <style lang="scss" scoped>
+.pagination-container {
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  left: 50%;
+
+  @include respond-to($xs) {
+    width: 600px;
+    margin-left: -300px;
+  }
+
+  @include respond-to($sm) {
+    width: 600px;
+    margin-left: -300px;
+  }
+
+  @include respond-to($md) {
+    width: 600px;
+    margin-left: -300px;
+  }
+
+  @include respond-to($lg) {
+    width: 600px;
+    margin-left: -300px + 128px;
+  }
+
+  @include respond-to($xl) {
+    width: 600px;
+    margin-left: -300px + 128px;
+  }
+}
 </style>
 
 

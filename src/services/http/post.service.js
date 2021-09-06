@@ -6,12 +6,12 @@ const PostService = {
     addPost(newPost) {
         return $axios.post(baseURL, newPost)
     },
-    getPosts({params}){
+    getPosts(params){
         return $axios.get(baseURL, { params })
     },
-    makeReaction(newReaction, postId){
+    makeReaction(postId, type){
         const url = `${baseURL}/${postId}/reactions`;
-        return $axios.patch(url, newReaction).then();
+        return $axios.patch(url, { type }).then();
     }
 };
 export default PostService;

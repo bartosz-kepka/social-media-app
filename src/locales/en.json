@@ -27,6 +27,9 @@
     "new-group-message": "New message from {sender} in group chat with {members}",
     "new-private-chat": "{creator} created a private chat with you",
     "new-group-chat": "{creator} created a group chat with {otherMembers} and you",
+    "account-created": "Account has been created successfully. You can now log in",
+    "new-like": "{sender} liked your post",
+    "new-dislike": "{sender} disliked your post"
     "update-success": "Account has been updated successfully",
     "account-created": "Account has been created successfully. You can now log in"
   },
@@ -76,11 +79,13 @@
       "error-message-chat-exists": "Chat with these members already exists"
     }
   },
-    "posts": {
-      "create": {
-        "add-new-post": "Add new post",
-        "title": "New Post",
-        "write-something": "Write something..."
-      }
+  "posts": {
+    "create": {
+      "add-new-post": "Add new post",
+      "title": "New Post",
+      "write-something": "Write something...",
+      "error-content-required": "Post cannot by empty",
+      "error-content-max-length": "Post content cannot be longer that 1024 characters"
     }
+  }
 }
