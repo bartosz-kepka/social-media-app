@@ -1,7 +1,9 @@
 export const normalizeUserIdentities = (userIdentities) => {
   const userIdentitiesObject = {};
-  for (const { id, ...userIdentity } of userIdentities) {
-    userIdentitiesObject[id] = userIdentity;
+  for (const userIdentity of userIdentities) {
+    userIdentitiesObject[userIdentity.id] = {
+      ...userIdentity
+    };
   }
   return userIdentitiesObject;
 };
