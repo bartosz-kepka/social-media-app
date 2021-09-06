@@ -1,75 +1,132 @@
 <template>
   <v-container class="container">
-    {{ JSON.stringify(this.user) }}
-    <Spinner v-if="loading"/>
-    <div v-else>
-      <div v-if="!editMode">
+    <!--    {{ JSON.stringify(this.user) }}-->
+    <Spinner
+      v-if="loading"
+    />
+    <div
+      v-else
+      class="pa-8"
+    >
+      <div
+        v-if="!editMode"
+      >
         <div class="text-h6">
-          {{ $t('general.first-name') }}
+          {{ $t('general.first-name') }}:
         </div>
-        <div class="mb-4">
+        <div class="mb-4 text-h5 font-weight-bold ml-16 pl-11 outlin">
           {{ user.firstName }}
         </div>
         <div class="text-h6">
-          {{ $t('general.first-name') }}
+          {{ $t('general.last-name') }}:
         </div>
-        <div class="mb-4">
-          {{ user.firstName }}
+        <div class="mb-4 text-h5 font-weight-bold ml-16 pl-11">
+          {{ user.lastName }}
         </div>
         <div class="text-h6">
-          {{ $t('general.first-name') }}
+          {{ $t('general.description') }}:
         </div>
-        <div class="mb-4">
-          {{ user.firstName }}
+        <div class="mb-4 text-h5 font-weight-bold ml-16 pl-11">
+          {{ user.description }}
         </div>
+<!--        <v-row>-->
+<!--          <v-col cols="12" md="6">-->
+<!--            <v-text-field-->
+<!--                v-model.trim="editedUser.firstName"-->
+<!--                :label="$t('general.first-name')"-->
+<!--                outlined-->
+<!--                readonly-->
+<!--            />-->
+<!--          </v-col>-->
+<!--        </v-row>-->
+<!--        <v-row>-->
+<!--          <v-col cols="12" md="6">-->
+<!--            <v-text-field-->
+<!--                v-model.trim="editedUser.lastName"-->
+<!--                :label="$t('general.first-name')"-->
+<!--                outlined-->
+<!--                readonly-->
+<!--            />-->
+<!--          </v-col>-->
+<!--        </v-row>-->
+<!--        <v-row>-->
+<!--          <v-col cols="12" md="6">-->
+<!--            <v-textarea-->
+<!--                v-model.trim="editedUser.description"-->
+<!--                :label="$t('general.first-name')"-->
+<!--                outlined-->
+<!--                readonly-->
+<!--            />-->
+<!--          </v-col>-->
+<!--        </v-row>-->
       </div>
       <div v-else>
+        <div class="text-h6 ">
+          {{ $t('general.first-name') }}:
+        </div>
+        <div class="mb-2 text-h5 font-weight-bold ml-16 pl-11">
         <v-row>
           <v-col cols="12" md="6">
             <v-text-field
                 v-model.trim="editedUser.firstName"
-                :label="$t('general.first-name')"
                 outlined
             />
           </v-col>
         </v-row>
+        </div>
+        <div class="text-h6">
+          {{ $t('general.last-name') }}:
+        </div>
+        <div class="mb-2 text-h5 font-weight-bold ml-16 pl-11">
         <v-row>
           <v-col cols="12" md="6">
             <v-text-field
                 v-model.trim="editedUser.lastName"
-                :label="$t('general.first-name')"
                 outlined
             />
           </v-col>
         </v-row>
+        </div>
+        <div class="text-h6">
+          {{ $t('general.description') }}:
+        </div>
+        <div class="mb-2 text-h5 font-weight-bold ml-16 pl-11">
         <v-row>
-          <v-col cols="12" md="6">
-            <v-textarea
+          <v-col
+              cols="12"
+              md="6"
+          >
+           <v-textarea
                 v-model.trim="editedUser.description"
-                :label="$t('general.first-name')"
                 outlined
-            />
+           />
           </v-col>
         </v-row>
+        </div>
       </div>
       <v-btn
-          v-if="editPossible && !editMode"
-          @click="editMode = !editMode"
+        v-if="editPossible && !editMode"
+        class="v-btn v-btn--text theme--dark v-size--default"
+        @click="editMode = !editMode"
       >
         EDIT
       </v-btn>
-      <v-btn
+      <div class="justify-space-between py-3">
+        <v-btn
           v-if="editPossible && editMode"
-          @click="editMode = !editMode"
-      >
-        CANCEL
-      </v-btn>
-      <v-btn
+          class="v-btn"
+          @click="cancelBtn()"
+        >
+           CANCEL
+        </v-btn>
+        <v-btn
           v-if="editPossible && editMode"
+          class="v-btn primary pull-right"
           @click="editUser"
-      >
-        SAVE
-      </v-btn>
+        >
+          SAVE
+        </v-btn>
+      </div>
       <!--    <v-row class="mb-0">-->
       <!--      <v-col-->
       <!--          cols="12"-->
@@ -186,6 +243,13 @@ export default {
             });
           });
     },
+    cancelBtn() {
+      this.editMode = !this.editMode;
+      this.editedUser = {
+        ...this.editedUser,
+        ...this.user,
+      };
+    }
   },
   validations: {
     editedUser: {
