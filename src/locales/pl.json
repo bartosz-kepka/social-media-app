@@ -8,7 +8,8 @@
     "password": "Hasło",
     "description": "Opis",
     "first-name": "Imię",
-    "last-name": "Nazwisko"
+    "last-name": "Nazwisko",
+    "no-results": "Brak pasujących wyników"
   },
   "navigation": {
     "home": "Strona główna",
@@ -63,12 +64,13 @@
     },
     "create": {
       "title": "Utwórz nowy czat",
-      "subtitle": "Dodaj członków",
-      "member-name": "Imię członka",
-      "error-message-required": "Musisz podać imię członka",
+      "subtitle": "Dodani członkowie",
+      "search-users": "Wyszukaj użytkowników poniżej",
+      "user": "Użytkownik",
+      "error-message-required": "Podaj nazwę użytkownika",
       "error-message-not-current-user": "Nie musisz dodawać siebie",
-      "error-message-not-already-added": "Ten członek jest już dodany",
-      "error-message-chat-exists": "Czat z tymi użytkownikami już istnieje"
+      "error-message-not-already-added": "Ten użytkownik jest już dodany",
+      "error-message-chat-exists": "Czat z tymi członkami już istnieje"
     }
   }
 }

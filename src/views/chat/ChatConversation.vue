@@ -24,7 +24,7 @@ export default {
       this.$store.dispatch('chat/fetchChat', chatId);
     }
   },
-  destroyed() {
+  beforeDestroy() {
     this.$store.dispatch('chat/clearChat');
   },
 };

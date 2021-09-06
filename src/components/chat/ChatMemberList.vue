@@ -1,74 +1,47 @@
 <template>
   <div>
-    <Spinner v-if="loading" />
+    <Spinner v-if="loading"/>
     <div
-      v-if="!loading"
-      class="mb-3 text-h4"
+        v-if="!loading"
+        class="mb-3 text-h4"
     >
       {{ $t(titleKey, { count: userChats.length }) }}
     </div>
-    <v-sheet
-      v-if="userChats.length > 0"
-      outlined
-      rounded
-    >
-      <v-list class="py-0">
-        <template
-          v-for="(chat, chatIndex) in userChats"
-        >
-          <v-list-item
-            :key="chat.id"
-            :to="`/chat/${chat.id}`"
-            link
-          >
-            <v-list-item-content>
-              <div
-                v-for="(member, memberIndex) in chat.membersIds"
-                :key="member"
-                :class="{ 'mb-2': memberIndex !== chat.membersIds.length - 1 }"
-                class="d-flex align-center"
-              >
-                <Avatar
-                  :alt="`${member}'s avatar`"
-                  :size="40"
-                />
-                {{ member }}
-              </div>
-            </v-list-item-content>
-          </v-list-item>
-          <v-divider
-            v-if="chatIndex !== userChats.length - 1"
-            :key="chatIndex"
-          />
-        </template>
-      </v-list>
-    </v-sheet>
+    <UserGroupList
+        :user-groups="userChats"
+        :user-identities="userIdentities"
+        :get-users-ids="(chat) => chat.membersIds"
+        :get-redirect-link="(chat) => `/chat/${chat.id}`"
+    />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
-import Avatar from '@/components/shared/Avatar';
 import Spinner from '@/components/shared/Spinner';
+import UserGroupList from '@/components/shared/UserGroupList/UserGroupList';
 
 export default {
   name: 'ChatMemberList',
-  components: { Avatar, Spinner },
+  components: { UserGroupList, Spinner },
   computed: {
     ...mapGetters({
-      user: 'user/user',
+      userId: 'user/userId',
       chats: 'chat/chats',
       loading: 'chat/loading',
+      userIdentities: 'chat/userIdentities',
     }),
     userChats() {
       if (this.chats.length === 0) {
         return [];
       }
-      const userChats = this.chats.filter(chat => chat.membersIds?.includes(this.user.name));
-      const userChatsCopy = JSON.parse(JSON.stringify(userChats));
-      // remove user from member lists so it's name is not displayed on the chat list
-      userChatsCopy.forEach(chat => chat.membersIds = chat.membersIds.filter(memberId => memberId !== this.user.name));
-      return userChatsCopy;
+      // remove user from member lists so their name is not displayed on the chat list
+      return this.chats.map(chat => {
+        return {
+          ...chat,
+          membersIds: chat.membersIds.filter(memberId => memberId !== this.userId),
+        };
+      });
     },
     titleKey: (vm) => vm.userChats.length > 0 ? 'chat.list.your-chats' : 'chat.list.no-chats',
   },
