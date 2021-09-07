@@ -3,9 +3,12 @@
     "cancel": "Anuluj",
     "create": "Utwórz",
     "close": "Zamknij",
+    "edit": "Edytuj",
+    "save": "Zapisz",
     "or": "lub",
     "email": "Email",
     "password": "Hasło",
+    "description": "Opis",
     "first-name": "Imię",
     "last-name": "Nazwisko",
     "no-results": "Brak pasujących wyników"
@@ -23,6 +26,7 @@
     "new-group-message": "Nowa wiadomość od {sender} w czacie z {members}",
     "new-private-chat": "{creator} utworzył z Tobą prywatny czat",
     "new-group-chat": "{creator} utworzył nowy grupowy chat z {otherMembers} oraz Tobą",
+    "update-success": "Pomyślnie zaktualizowano profil",
     "account-created": "Konto zostało utworzone pomyślnie. Mozesz się teraz zalogować"
   },
   "login": {

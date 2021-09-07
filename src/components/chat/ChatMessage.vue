@@ -10,7 +10,7 @@
       <template v-slot:activator="{ on, attrs }">
         <v-sheet
             v-bind="attrs"
-            :color="isSender ? 'primary' : 'secondary'"
+            :color="isSender ? 'primary lighten-1' : 'secondary lighten-4'"
             class="message-item pa-2 ma-1"
             rounded
             v-on="on"

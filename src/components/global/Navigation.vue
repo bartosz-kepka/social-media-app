@@ -29,7 +29,7 @@
         <v-list-item
             class="py-1"
             link
-            to="/profile"
+            :to="`/profile/${userId}`"
         >
           <Avatar :alt="`${displayName}'s avatar`"/>
           <v-list-item-content>
@@ -93,6 +93,7 @@ export default {
     ...mapGetters({
       isAuthenticated: 'user/isAuthenticated',
       displayName: 'user/displayName',
+      userId: 'user/userId',
     }),
     nightMode: {
       get() {

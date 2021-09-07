@@ -11,6 +11,10 @@ const AuthService = {
     const url = `${baseURL}/register`;
     return $axios.post(url, newAccount);
   },
+  update(editedAccount) {
+    const url = `${baseURL}/update`;
+    return $axios.put(url, editedAccount);
+  },
 };
 
 export default AuthService;

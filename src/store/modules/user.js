@@ -2,6 +2,7 @@ import AuthService from '@/services/http/auth.service';
 import i18n from '@/locales/i18n';
 import { NOTIFICATION_TYPES } from '@/store/modules/notification';
 import router from '@/router';
+import UserService from '@/services/http/user.service';
 
 export default {
   namespaced: true,
@@ -37,6 +38,17 @@ export default {
           });
         })
         .finally(() => commit('setLoading', false));
+    },
+    update({ commit }, editedAccount) {
+      commit('setLoading', true);
+      return UserService.editUser(editedAccount)
+          .then(() => {
+            const message = i18n.t('notifications.editUser-success');
+            this.dispatch('notification/showNotification', {
+              message,
+              type: NOTIFICATION_TYPES.SUCCESS,
+            });
+          }).finally(() => commit('setLoading', false));
     },
     logIn({ commit }, credentials) {
       commit('setLoading', true);
