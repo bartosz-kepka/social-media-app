@@ -1,12 +1,10 @@
 <template>
   <v-container class="container">
-    <!--    {{ JSON.stringify(this.user) }}-->
     <Spinner
         v-if="loading"
     />
     <div
         v-else
-        class="pa-8"
     >
       <div
           v-if="!editMode"
@@ -14,19 +12,19 @@
         <div class="text-h6">
           {{ $t('general.first-name') }}:
         </div>
-        <div class="mb-4 text-h5 font-weight-bold ml-16 pl-11 outlin">
+        <div class="mb-4 text-h5 font-weight-bold">
           {{ user.firstName }}
         </div>
         <div class="text-h6">
           {{ $t('general.last-name') }}:
         </div>
-        <div class="mb-4 text-h5 font-weight-bold ml-16 pl-11">
+        <div class="mb-4 text-h5 font-weight-bold">
           {{ user.lastName }}
         </div>
         <div class="text-h6">
           {{ $t('general.description') }}:
         </div>
-        <div class="mb-4 text-h5 font-weight-bold ml-16 pl-11">
+        <div class="mb-4 text-h5 font-weight-bold">
           {{ user.description }}
         </div>
       </div>
@@ -34,9 +32,9 @@
         <div class="text-h6 ">
           {{ $t('general.first-name') }}:
         </div>
-        <div class="mb-2 text-h5 font-weight-bold ml-16 pl-11">
+        <div class="mb-2 text-h5 font-weight-bold">
           <v-row>
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="9" lg="4">
               <v-text-field
                   v-model.trim="editedUser.firstName"
                   outlined
@@ -47,9 +45,9 @@
         <div class="text-h6">
           {{ $t('general.last-name') }}:
         </div>
-        <div class="mb-2 text-h5 font-weight-bold ml-16 pl-11">
+        <div class="mb-2 text-h5 font-weight-bold">
           <v-row>
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="9" lg="4">
               <v-text-field
                   v-model.trim="editedUser.lastName"
                   outlined
@@ -60,11 +58,12 @@
         <div class="text-h6">
           {{ $t('general.description') }}:
         </div>
-        <div class="mb-2 text-h5 font-weight-bold ml-16 pl-11">
+        <div class="mb-2 text-h5 font-weight-bold">
           <v-row>
             <v-col
                 cols="12"
-                md="6"
+                md="9"
+                lg="4"
             >
               <v-textarea
                   v-model.trim="editedUser.description"
@@ -74,50 +73,50 @@
           </v-row>
         </div>
       </div>
-      <v-btn
-          v-if="editPossible && !editMode"
-          class="v-btn v-btn--text theme--dark v-size--default"
-          @click="editMode = !editMode"
-      >
-        EDIT
-      </v-btn>
-      <div class="ml-16 pl-11 mr-16 d-flex justify-space-between">
       <v-row>
-        <v-col class="d-flex justify-space-between">
-          <div class="d-flex">
+        <v-col cols="12" md="9" lg="4">
+          <v-btn
+              v-if="editPossible && !editMode"
+              class="primary"
+              text
+              @click="editMode = !editMode"
+          >
+            {{ $t('general.edit')}}
+          </v-btn>
+          <div class="d-flex justify-space-between">
             <v-btn
                 v-if="editPossible && editMode"
-                class="v-btn mr-16"
+                text
                 @click="cancelBtn()"
             >
-              CANCEL
+              {{ $t('general.cancel')}}
             </v-btn>
             <v-btn
                 v-if="editPossible && editMode"
-                class="v-btn primary ml-16"
+                class="primary"
+                text
                 @click="editUser"
             >
-              SAVE
+              {{ $t('general.save')}}
             </v-btn>
           </div>
         </v-col>
       </v-row>
-      </div>
     </div>
   </v-container>
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
+import { mapGetters } from 'vuex';
 import UserService from '@/services/http/user.service';
 import i18n from '@/locales/i18n';
-import {NOTIFICATION_TYPES} from '@/store/modules/notification';
+import { NOTIFICATION_TYPES } from '@/store/modules/notification';
 import Spinner from '@/components/shared/Spinner';
-import {maxLength, minLength, required} from 'vuelidate/lib/validators';
+import { maxLength, minLength, required } from 'vuelidate/lib/validators';
 
 export default {
   name: 'Profile',
-  components: {Spinner},
+  components: { Spinner },
   data() {
     return {
       user: undefined,
@@ -135,7 +134,7 @@ export default {
     ...mapGetters({
       displayName: 'user/displayName',
       currentUserId: 'user/userId',
-      currentUser: 'user/user'
+      currentUser: 'user/user',
     }),
     editPossible() {
       return this.currentUserId === this.userId;
@@ -156,7 +155,7 @@ export default {
     getUser() {
       this.loading = true;
       UserService.getUser(this.userId).then(
-          ({data: user}) => {
+          ({ data: user }) => {
             this.user = user;
             this.editedUser = {
               ...this.editedUser,
@@ -188,7 +187,7 @@ export default {
         ...this.editedUser,
         ...this.user,
       };
-    }
+    },
   },
   validations: {
     editedUser: {
@@ -203,8 +202,8 @@ export default {
         maxLength: maxLength(50),
       },
       description: {
-        maxLength: maxLength(1200),
-      }
+        maxLength: maxLength(1024),
+      },
     },
   },
 };

@@ -3,6 +3,8 @@
     "cancel": "Cancel",
     "create": "Create",
     "close": "Close",
+    "edit": "Edit",
+    "save": "Save",
     "or": "or",
     "email": "Email",
     "password": "Password",
@@ -24,7 +26,7 @@
     "new-group-message": "New message from {sender} in group chat with {members}",
     "new-private-chat": "{creator} created a private chat with you",
     "new-group-chat": "{creator} created a group chat with {otherMembers} and you",
-    "update-success": "Account has been updated.",
+    "update-success": "Account has been updated successfully",
     "account-created": "Account has been created successfully. You can now log in"
   },
   "login": {
