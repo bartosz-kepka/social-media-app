@@ -5,9 +5,9 @@ import store from '@/store';
 import Home from '@/views/Home';
 import ChatList from '@/views/chat/ChatList';
 import Profile from '@/views/Profile';
-import Register from '@/views/Register';
 import ChatConversation from '@/views/chat/ChatConversation';
 import Login from '@/views/Login';
+import Register from '@/views/Register';
 
 Vue.use(VueRouter);
 
